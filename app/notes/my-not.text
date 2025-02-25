@@ -1,0 +1,37 @@
+$("#save-changes").on("click", function() {
+                    const id = $("#form-id").val();
+                    const id = $("#form-mobile").val();
+                    const id = $("#form-phone").val();
+                    const id = $("#form-address").val();
+
+                    //defination url and methode
+                    let url, method;
+
+                    //check type of method
+                    if (id) {
+                        url = `address/${id}`;
+                        method = 'PUT';
+                    } else {
+                        url = 'addres';
+                        method = 'POST';
+                    }
+                    $.ajax({
+                        url: url,
+                        method: method,
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            mobile: mobile,
+                            phone: phone,
+                            address: address,
+                            user_id: id ? null : {{ Auth::user()->id }}
+                        },
+                        success: function(response) {
+                            alrt(response.message),
+                                location.reload(),
+                        },
+                        error: function(xhr) {
+                            alert('Error:' + xhr.responseJSON.message ||
+                                'unexpected error occured')
+                        }
+                    });
+                }); 

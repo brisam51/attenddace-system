@@ -1,0 +1,56 @@
+ {{-- <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">شماره ملی</label>
+                            <input type="text" name="national_id" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">کد پرسنلی</label>
+                            <input type="text" name="card_id" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">تاریخ تولد</label>
+                            <select class="form-select" aria-label="Default select example">
+                                <option selected name="birth_date">Open this select menu</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlTextarea1" class="form-label"> آدرس</label>
+                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">نقش</label>
+                            <select class="form-select" name="role" aria-label="Default select example">
+                                <option selected>Open this select menu</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">پسورد</label>
+                            <input type="text"name="password" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label"> وضعیت شغلی</label>
+                            <select class="form-select" aria-label="Default select example">
+                                <option selected>Open this select menu</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">ایمیل</label>
+                            <input type="text"name="email" class="form-control">
+                        </div> --}}
+                        {{-- <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">تصویر</label>
+                            <div class="input-group mb-3">
+                                <input type="file" class="form-control" aria-describedby="inputGroupFileAddon03"
+                                    aria-label="Upload">
+                            </div>
+                        </div> --}}

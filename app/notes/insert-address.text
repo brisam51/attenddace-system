@@ -1,0 +1,91 @@
+ <script>
+        $(document).ready(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $(".address-modal").on("click", function(e) {
+                e.preventDefault();
+                $('#editaddress-modal').show();
+                var user_id = $(this).data('id');
+                $("#form-id").val(user_id);
+                //show user imag
+                $.ajax({
+                    url: '{{ route('get.user.details', ['id' => ':id']) }}'.replace(':id', user_id),
+                    type: 'GET',
+
+                    success: function(response) {
+                        if (response.status == 'success') {
+                            $("#user-image").attr('src', response.data.image);
+                            $("#first_name").text(response.data.first_name);
+                            $("#last_name").text(response.data.last_name);
+                        }
+                    }
+                });
+            });
+            //Work on submition new record
+            $("#addressForm").submit(function(e) {
+                e.preventDefault();
+                //Collect data from the Form
+                const user_id = $("#form-id").val();
+                const mobile = $("#form-mobile").val();
+                const phone = $("#form-phone").val();
+                const address = $("#form-address").val();
+
+                // Send data via Ajax
+                $.ajax({
+                    url: 'address/store',
+                    type: 'POST',
+
+                    data: {
+                        mobile: mobile,
+                        phone: phone,
+                        address: address,
+                        user_id: user_id
+                    },
+                    success: function(response) {
+                        if (response.status == 'success') {
+                            alert(response.message);
+
+                            $("#form-id").val('');
+                            $("#form-mobile").val('');
+                            $("#form-phone").val('');
+                            $("#form-address").val('');
+
+                            $('#editaddress-modal').hide();
+                        }
+
+                    },
+                    error: function(xhr) {
+                        var response = xhr.responseJSON;
+                        if (response && response.status == 'error') {
+                            if (response.errors) {
+                                for (var field in response.errors) {
+                                    $('#' + field + '_error').text(response.errors[field][0])
+                                        .show();
+                                }
+                            }
+                        } else {
+                            alert('Error occured when try to save new record');
+                        }
+
+                    },
+                });
+            });
+            $("#save-changes").on("click", function() {
+                alert("save changes it work");
+                $('#editaddress-modal').hide();
+                location.reload();
+            });
+            $("#close-editmodal").on("click", function() {
+
+                $("#form-id").val('');
+                $("#form-mobile").val('');
+                $("#form-phone").val('');
+                $("#form-address").val('');
+                location.reload();
+                $('#editaddress-modal').hide();
+            });
+        });
+    </script>

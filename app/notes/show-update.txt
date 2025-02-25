@@ -1,0 +1,81 @@
+<script>
+        $(document).ready(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            //get user_id from linke
+            $(".openAddressModal").on("click", function(e) {
+                e.preventDefault();
+                //alert('Every thing is ok');
+                $("#addressModal").show();
+                var form = $("#addressForm");
+                var submitButton = $("#saveButton")
+                var id = $(this).data('id');
+                $("#user_id").val(id);
+
+                //fetch address data
+                $.ajax({
+                    url: '/address/' + id,
+                    type: "GET",
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.status == 'success') {
+                            var addressData = response.data;
+
+                            $("#address_id").val(addressData.id);
+                            $("#form-mobile").val(addressData.mobile);
+                            $("#form-phone").val(addressData.phone);
+                            $("#form-address").val(addressData.address);
+                        } else {
+                           return '';
+
+                        }
+                    }
+                });
+
+
+                //update cuttent address data by AJAX
+                form.submit(function(event) {
+                    event.preventDefault();
+                    //claculate data from input fields
+                    var formData = {
+                        id: $("#address_id").val(),
+                        mobile: $("#form-mobile").val(),
+                        phone: $("#form-phone").val(),
+                        address: $("#form-address").val(),
+                        user_id: $("#user_id").val(),
+                    };
+
+
+                    //send data via AJAX
+                    $.ajax({
+                        url: '/address/update',
+                        type: 'PUT',
+                        dataType: 'json',
+                        data: formData,
+                        success: function(response) {
+                            if (response.status == 'success') {
+                                alert(response.message);
+                                $("#addressModal").hide();
+                            }
+                        },
+                        error: function(response) {
+                            if (response.status == 'error') {
+                                alert(response.error);
+                            }
+                        }
+                    });
+
+                });
+
+
+
+
+            });
+            $("#close-amodal").on("click", function() {
+                $("#addressModal").hide();
+            }); //end modal
+        });
+    </script>

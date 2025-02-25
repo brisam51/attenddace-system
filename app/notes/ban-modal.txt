@@ -1,0 +1,51 @@
+<div id="bank-modal" class="modal " tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="row">
+                        <img id="bank-user-image" src="" class="user-image" alt="User Image">
+                        <div id="user-info" class="modal-title"></div>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    {{-- Start address form --}}
+                    <form id="bankInfoForm">
+                        <input type="text" hidden name="" id="bank_id">
+                        <input type="text" hidden name="" id="user_id">
+                        <span id="user_id_error" class="error-message"></span>
+                        <div class="form-group">
+                            <label for="">شماره حساب:</label>
+                            <input type="text" class="form-control" id="bank_number" name="bank_number">
+                            @error('bank_number')
+                                <span class="text-bg-danger">{{ $messag }}</span>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <label for="">نام بانک:</label>
+                            <input type="text" class="form-control" id="bank_name" name="bank_name">
+                            @error('bank_name')
+                                <span class="text-bg-danger">{{ $messag }}</span>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <label for="">شماره شبا:</label>
+                            <input type="text" class="form-control" id="shaba_number" name="shaba_number">
+                            @error('shaba_number')
+                                <span class="text-bg-danger">{{ $messag }}</span>
+                            @enderror
+                        </div>
+                        <button id="saveButton" type="submit" class="btn btn-primary">Save </button>
+
+                    </form>
+                    {{-- End address form --}}
+
+                </div>
+                <div class="modal-footer">
+                    <button id="close-bank-amodal" type="button" class="btn btn-secondary"
+                        data-bs-dismiss="modal">Close</button>
+
+
+                </div>
+            </div>
+        </div>
+    </div>

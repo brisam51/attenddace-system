@@ -1,0 +1,95 @@
+ //Open modal for creating address...
+        $(".openAddressModal").on("click", function() {
+
+            //reset the form...
+            form.trigger('reset');
+            $(".error-message").text('').hide();
+
+            //set title for saveButton an modal title
+            saveButton.text('Save Address');
+
+            //shoe modal
+            modal.show();
+
+            //Get assres id from link edit attrbute
+            var addressId = $(this).data('id');
+
+            //Fetch address detailes via Ajax
+            $.ajax({
+                url: '{{ route('get.address.details', ['id' => ':id']) }}'.replace(':id',
+                    addressId),
+                type: "GET",
+                data: {
+                    user_id: addressId
+                },
+                success: function(response) {
+                    if (response.status == 'success') {
+                        $("#address_id").val(response.data.id);
+                        $("#form-mobile").val(response.data.mobile);
+                        $("#form-phone").val(response.data.phone);
+                        $("#form-address").val(response.data.address);
+                        $("#form-user-id").val(response.data.user_id);
+                        saveButton.text('Update Address');
+                        modal.show();
+                    }
+                },
+                error: function(response) {
+                    alert('Failed to fetch data');
+
+                }
+            });
+
+        });
+        //end opn
+        //Handel  Form submiton (create or update)...
+        form.submit(function(event) {
+            event.perventDefault();
+
+            //Determine action is create or update...
+            var addressId = $("#address_id").val();
+            var url = addressId ? '{{ route('update.address',['id'=>':id']) }}'.replace(':id','addressId') : '{{ route('create.address',) }}';
+            var method = addressId ? 'PUT' : 'POST';
+
+            //Collect Data from the form...
+            var formData = {
+                mobile: $("#form-mobile").val(),
+                phon: $("#form-phone").val(),
+                address: $("#form-address").val(),
+                user_id: $("#form-user-id").val(),
+                id: addressId, // for update
+            };
+            //Send data via AJAX....
+            $.ajax({
+                url: url,
+                type: method,
+                data: formData,
+                data: formData,
+                success: function(response) {
+                    if (response.status == 'success') {
+                        alert(response.message);
+                        modal.hide();
+                        location.reload();
+
+                    }
+                },
+
+                error: function(xhr) {
+                    var response = xhr.responseJSON;
+                    if(response && response.status==error){
+                        if (response.errors) {
+                        fore(var field in response.errors) {
+                            $("#" + field + '_error').text(response.errors[field][0])
+                                .show();
+                        }
+                    }
+                    }else{
+                        alert('There was an error processing your request.');
+                    }
+
+                },
+
+            });
+
+        });
+        });
+
