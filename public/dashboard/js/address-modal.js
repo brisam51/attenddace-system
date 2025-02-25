@@ -1,12 +1,10 @@
 $(function () {
-    var modal = $("#address-modal");
-    var addressLink = $(".address-link");
-    var form = $("#addressForm");
-    var saveButton = $("#saveButton");
-
     //indicate on address link in User table
     $(".address-user").on("click", function () {
-
+        
+        var modal = $("#address-modal");
+        var form = $("#addressForm");
+        var saveButton = $("#saveButton");
         form.trigger("reset");
         saveButton.text("save");
         var userId = $(this).data("id");
@@ -25,7 +23,6 @@ $(function () {
             method: "GET",
             success: function (response) {
                 if (response.status === "success") {
-
                     $("#address_id").val(response.data.id);
                     $("#form-mobile").val(response.data.mobile);
                     $("#form-phone").val(response.data.phone);
@@ -41,35 +38,21 @@ $(function () {
                     $("#isUpdate").text("issave");
                 }
                 modal.show();
-            },//end success
+            }, //end success
             error: function (response) {
                 alert(response.responseJSON.message);
                 saveButton.text("ذخیره");
                 modal.show();
-            }
+            },
         });
 
         //Hand over form submission to modal save button
         form.on("submit", function (event) {
             event.preventDefault();
 
-            isUpdate=  $("#isUpdate").text("is-save");//Detrmine if the form is for creating or updating an address
+            isUpdate = $("#isUpdate").text(); //Detrmine if the form is for creating or updating an address
 
-
-
-            //var url =isUpdate ?  updateAddressUrl: createAddressUrl+userId;  // replace USER_ID with actual user id;
-            var url = isUpdate==='isupdate' ? "address/update/"+userId  : "/address/store";  // replace USER_ID with actual user id;
-            var method =  'post';
-            var csrfToken = $('meta[name="csrf-token"]').attr('content');
-            //preparing form data for sending to server
-            var formData = {
-                _token: csrfToken,
-                user_id: userId,
-                mobile: $("#form-mobile").val(),
-                phone: $("#form-phone").val(),
-                address: $("#form-address").val(),
-            }
-
+         if( isUpdate.text==='isupdate'){
             $.ajax({
                 url: url,
                 method: method,
@@ -82,24 +65,43 @@ $(function () {
                     } else {
                         alert(response.message);
                     }
-                },//end success
+                }, //end success
                 error: function (xhr) {
                     var response = xhr.responseJSON;
-                    if (response && response.status === 'error') {
+                    if (response && response.status === "error") {
                         // Display validation errors
                         if (response.errors) {
                             for (var field in response.errors) {
-                                $('#' + field + '_error').text(response.errors[field][0]).show();
+                                $("#" + field + "_error")
+                                    .text(response.errors[field][0])
+                                    .show();
                             }
                         }
                     } else {
-                        alert('There was an error processing your request.');
+                        alert("There was an error processing your request.");
                     }
-                }
+                },
             });
+         }else{
+
+         }
+
+            // var method = "post";
+            // var csrfToken = $('meta[name="csrf-token"]').attr("content");
+            //preparing form data for sending to server
+            // var formData = {
+            //     _token: csrfToken,
+            //     user_id: userId,
+            //     mobile: $("#form-mobile").val(),
+            //     phone: $("#form-phone").val(),
+            //     address: $("#form-address").val(),
+            // };
         });
-    });
-    $("#close-amodal").on("click", function () {
-        $("#address-modal").hide();
-    });
-}); //end script
+
+    //     });
+    // });
+    // $("#close-amodal").on("click", function () {
+    //     $("#address-modal").hide();
+    // }); var url =
+
+});}); //end script
