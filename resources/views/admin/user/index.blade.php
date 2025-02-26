@@ -30,7 +30,7 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table id="user-table" class="   user-table">
+                <table id="user-table" class=" user-table">
                     <thead>
                         <tr>
                             <th scope="col">#</th>
@@ -72,7 +72,7 @@
                                             <a href="{{ url('user/edit/' . $user->id) }}" class="link link-green">بروز
                                                 رسانی</a>
                                         </div>
-                                        <div class="row mt-2">
+                                        <div class="mt-2 row">
                                             <a href="{{ url('user/delete/' . $user->id) }}" class="link link-red">حذف</a>
                                         </div>
                                     </div>
@@ -81,15 +81,15 @@
                                     <div class="col">
                                         <div class="row ">
                                             <a href="#" data-id="{{ $user->id }}"
-                                                class="link link-blue address-user ">آدرس</a>
+                                                class="link link-blue user-address">آدرس</a>
                                                 {{-- {{ url('user/address/edit/'. $user->id) }} --}}
                                         </div>
-                                        <div class="row mt-2">
+                                        <div class="mt-2 row">
                                             <a href="#"
                                                 class="link link-yellow bank_info_link">اطلاعات بانکی
                                             </a>
                                         </div>
-                                        <div class="row mt-2">
+                                        <div class="mt-2 row">
                                             <a href="http://" class="link link-gray">اطلاعات شغلی</a>
                                         </div>
                                     </div>
