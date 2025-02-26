@@ -20,9 +20,9 @@ Route::post('user/update/{id}', [UserController::class, 'update']);
 Route::get('user/delete/{id}', [UserController::class, 'destroy']);
 //Address routes
 Route::get('user/address/{id}', [AddressController::class, 'fetchDataById'])->name('get.user.address');
-Route::post('user/address/store/{id}', [AddressController::class, 'store'])->name('create.user.address');
+Route::post('user/address/store', [AddressController::class, 'store'])->name('create.user.address');
 Route::get('user/address/edit/{id}', [AddressController::class, 'edit']);
-Route::post('user/address/update/{id}', [AddressController::class, 'update'])->name('update.user.address');
+Route::put('user/address/update/{id}', [AddressController::class, 'update'])->name('update.user.address');
 //bank details
 Route::get('user/bank/{id}', [BankInfoController::class, 'fetchDataById'])->name('get.user.bank');
 Route::post('/bank/store', [BankInfoController::class, 'store'])->name('create.user.bank');

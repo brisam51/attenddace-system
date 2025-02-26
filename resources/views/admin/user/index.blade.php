@@ -82,11 +82,10 @@
                                         <div class="row ">
                                             <a href="#" data-id="{{ $user->id }}"
                                                 class="link link-blue user-address">آدرس</a>
-                                                {{-- {{ url('user/address/edit/'. $user->id) }} --}}
+                                            {{-- {{ url('user/address/edit/'. $user->id) }} --}}
                                         </div>
                                         <div class="mt-2 row">
-                                            <a href="#"
-                                                class="link link-yellow bank_info_link">اطلاعات بانکی
+                                            <a href="#" class="link link-yellow bank_info_link">اطلاعات بانکی
                                             </a>
                                         </div>
                                         <div class="mt-2 row">
@@ -114,10 +113,10 @@
                 </div>
                 <div class="modal-body">
                     {{-- Start address form --}}
-                    <form id="address-form"  >
-
-                        <input type="text"  name="" id="address_id">
-                        <input type="text"  name="" id="user_id">
+                    <form id="address-form">
+                        <div class="form-group">
+                            <input type="text" hidden class="form-control" name="" id="address-id">
+                        </div>
 
                         <span id="user_id_error" class="error-message text-danger"></span>
                         <div class="form-group">
@@ -135,7 +134,7 @@
                             <textarea id="form-address" class="form-control" placeholder="Address"></textarea>
                             <span id="address_error" class="error-message"></span>
                         </div>
-                        <button id="saveButton" type="submit" class="btn btn-primary">Save </button>
+                        <button id="save-button" type="submit" class="btn btn-primary"></button>
 
                     </form>
                     {{-- End address form --}}
@@ -143,7 +142,7 @@
                 </div>
                 <div class="modal-footer">
                     <button id="close-amodal" type="button" class="btn btn-secondary"
-                        data-bs-dismiss="modal">Close</button>
+                        data-bs-dismiss="modal">بستن</button>
 
 
                 </div>
