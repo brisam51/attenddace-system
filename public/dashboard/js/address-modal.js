@@ -1,14 +1,14 @@
 $(function () {
     //indicate on address link in User table
     $(".address-user").on("click", function () {
-        
         var modal = $("#address-modal");
         var form = $("#addressForm");
         var saveButton = $("#saveButton");
         form.trigger("reset");
         saveButton.text("save");
         var userId = $(this).data("id");
-
+        var updateUrl = "user/address/update/" + userId;
+        var createUrl = "user/address/update/" + userId;
         //Fetchthe user image from user table
         var userImage = $(this).closest("tr").find(".user-image").attr("src");
         //upload user image to top of modal
@@ -52,39 +52,40 @@ $(function () {
 
             isUpdate = $("#isUpdate").text(); //Detrmine if the form is for creating or updating an address
 
-         if( isUpdate.text==='isupdate'){
-            $.ajax({
-                url: url,
-                method: method,
-                data: formData,
-                success: function (response) {
-                    if (response.status === "success") {
-                        alert(response.message);
-                        modal.hide();
-                        location.reload();
-                    } else {
-                        alert(response.message);
-                    }
-                }, //end success
-                error: function (xhr) {
-                    var response = xhr.responseJSON;
-                    if (response && response.status === "error") {
-                        // Display validation errors
-                        if (response.errors) {
-                            for (var field in response.errors) {
-                                $("#" + field + "_error")
-                                    .text(response.errors[field][0])
-                                    .show();
-                            }
+            if (isUpdate.text === "isupdate") {
+                $.ajax({
+                    url: url,
+                    method: method,
+                    data: formData,
+                    success: function (response) {
+                        if (response.status === "success") {
+                            alert(response.message);
+                            modal.hide();
+                            location.reload();
+                        } else {
+                            alert(response.message);
                         }
-                    } else {
-                        alert("There was an error processing your request.");
-                    }
-                },
-            });
-         }else{
-
-         }
+                    }, //end success
+                    error: function (xhr) {
+                        var response = xhr.responseJSON;
+                        if (response && response.status === "error") {
+                            // Display validation errors
+                            if (response.errors) {
+                                for (var field in response.errors) {
+                                    $("#" + field + "_error")
+                                        .text(response.errors[field][0])
+                                        .show();
+                                }
+                            }
+                        } else {
+                            alert(
+                                "There was an error processing your request."
+                            );
+                        }
+                    },
+                });
+            } else {
+            }
 
             // var method = "post";
             // var csrfToken = $('meta[name="csrf-token"]').attr("content");
@@ -98,10 +99,10 @@ $(function () {
             // };
         });
 
-    //     });
-    // });
-    // $("#close-amodal").on("click", function () {
-    //     $("#address-modal").hide();
-    // }); var url =
-
-});}); //end script
+        //     });
+        // });
+        // $("#close-amodal").on("click", function () {
+        //     $("#address-modal").hide();
+        // }); var url =
+    });
+}); //end script
