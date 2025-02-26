@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 $(function () {
     //indicate on address link in User table
     $(".address-user").on("click", function () {
@@ -106,3 +107,5 @@ $(function () {
         // }); var url =
     });
 }); //end script
+=======
+>>>>>>> e6d8b213209d11f2a95ca327a2735401aae394ff
