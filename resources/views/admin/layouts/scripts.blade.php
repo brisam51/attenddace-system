@@ -11,5 +11,5 @@
 <script src="{{asset('dashboard/js/main.js')}}"></script>
 <script src="{{asset('dashboard/js/custom.js')}}"></script>
 <script src="{{asset('dashboard/js/address-modal.js')}}"></script>
-{{-- <script src="{{asset('dashboard/js/bank_user_info.js')}}"></script> --}}
+<script src="{{asset('dashboard/js/bank_user_info.js')}}"></script>
 @yield('script')

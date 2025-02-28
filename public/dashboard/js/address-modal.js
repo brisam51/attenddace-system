@@ -1,11 +1,80 @@
 $(function () {
     var form = $("#address-form");
     var csrfToken = $('meta[name="csrf-token"]').attr('content'); // Adjust this based on your framework
+//handel update address
+function handelUpdateAddress(userId,formData){
+    $.ajax({
+        url: "/user/address/update/" + userId,
+        method: 'PUT',
+        data: formData,
+        headers: {
+            'X-CSRF-Token': csrfToken // Add CSRF token to headers
+        },
+        success: function (response) {
+            if (response.status === "success") {
+                alert(response.message);
+                $("#address-modal").hide();
+            } else {
+                alert("Error Happened");
+            }
+        },
+        error: function (xhr) {
+            var response = xhr.responseJSON;
+            if (response && response.status === "error") {
+                // Display validation errors
+                alert(response.message);
+                if (response.errors) {
+                    for (var field in response.errors) {
+                        $('#' + field + '_error').text(response.errors[field][0]).show();
+                    }
+                }
+            } else {
+                alert('There was an error processing your request.');
+            }
+        }
+    });
+}
 
+//handel insert new address
+function insertAddress(formData) {
+    $.ajax({
+        url: "/user/address/store",
+        method: 'POST',
+        headers: {
+            'X-CSRF-Token': csrfToken // Add CSRF token to headers
+        },
+        data: formData,
+        success: function (response) {
+            if (response.status === "success") {
+                alert(response.message);
+                $("#address-modal").hide();
+            }
+        },
+        error: function (xhr) {
+            var response = xhr.responseJSON;
+            if (response && response.status === "error") {
+                // Display validation errors
+                alert(response.message);
+                if (response.errors) {
+                    for (var field in response.errors) {
+                        $('#' + field + '_error').text(response.errors[field][0]).show();
+                    }
+                }
+            } else {
+                alert('There was an error processing your request.');
+            }
+        }
+    });
+}
     // Call address links from datatable
     $(".user-address").on("click", function () {
         var userId = $(this).data("id");
-
+        var userImage = $(this).closest("tr").find(".user-image").attr("src");
+        //upload user image to top of modal
+        $("#modal-user-image").attr("src", userImage);
+        var firstName = $(this).closest("tr").find(".user-first-name").text();
+        var lastName = $(this).closest("tr").find(".user-last-name").text();
+        $("#modal-user-name").text(firstName + " " + lastName);
         // Fetch address details for this user
         $.ajax({
             url: "/user/address/" + userId,
@@ -24,43 +93,13 @@ $(function () {
                         // Prepare form data
                         var formData = {
                             user_id: userId,
-                            id: $("#address-id").val(),// Include user_id in the form data
+                            id: $("#address-id").val(),
                             mobile: $("#form-mobile").val(),
                             phone: $("#form-phone").val(),
                             address: $("#form-address").val(),
                         };
+                        handelUpdateAddress(userId,formData);
 
-                        // Send data via AJAX
-                        $.ajax({
-                            url: "/user/address/update/" + userId,
-                            method: 'PUT',
-                            data: formData,
-                            headers: {
-                                'X-CSRF-Token': csrfToken // Add CSRF token to headers
-                            },
-                            success: function (response) {
-                                if (response.status === "success") {
-                                    alert(response.message);
-                                    $("#address-modal").hide();
-                                } else {
-                                    alert("Error Happened");
-                                }
-                            },
-                            error: function (xhr) {
-                                var response = xhr.responseJSON;
-                                if (response && response.status === "error") {
-                                    // Display validation errors
-                                    alert(response.message);
-                                    if (response.errors) {
-                                        for (var field in response.errors) {
-                                            $('#' + field + '_error').text(response.errors[field][0]).show();
-                                        }
-                                    }
-                                } else {
-                                    alert('There was an error processing your request.');
-                                }
-                            }
-                        });
                     });
                 } else {
                     $("#save-button").text("ذخیره");
@@ -75,34 +114,8 @@ $(function () {
                             phone: $("#form-phone").val(),
                             address: $("#form-address").val(),
                         }
-                        $.ajax({
-                            url: "/user/address/store",
-                            method: 'POST',
-                            headers: {
-                                'X-CSRF-Token': csrfToken // Add CSRF token to headers
-                            },
-                            data: formData,
-                            success: function (response) {
-                                if (response.status === "success") {
-                                    alert(response.message);
-                                    $("#address-modal").hide();
-                                }
-                            },
-                            error: function (xhr) {
-                                var response = xhr.responseJSON;
-                                if (response && response.status === "error") {
-                                    // Display validation errors
-                                    alert(response.message);
-                                    if (response.errors) {
-                                        for (var field in response.errors) {
-                                            $('#' + field + '_error').text(response.errors[field][0]).show();
-                                        }
-                                    }
-                                } else {
-                                    alert('There was an error processing your request.');
-                                }
-                            }
-                        });//end  ajax of insert new addres
+                        insertAddress(formData);
+                      
                     });
                 }
             },

@@ -24,6 +24,6 @@ Route::post('user/address/store', [AddressController::class, 'store'])->name('cr
 Route::get('user/address/edit/{id}', [AddressController::class, 'edit']);
 Route::put('user/address/update/{id}', [AddressController::class, 'update'])->name('update.user.address');
 //bank details
-Route::get('user/bank/{id}', [BankInfoController::class, 'fetchDataById'])->name('get.user.bank');
-Route::post('/bank/store', [BankInfoController::class, 'store'])->name('create.user.bank');
-Route::put('/bank/update/{id}', [BankInfoController::class, 'update'])->name('update.user.bank');
+Route::get('user/bank/index/{id}', [BankInfoController::class, 'fetchDataById'])->name('get.user.bank');
+Route::post('user/bank/store', [BankInfoController::class, 'store']);
+Route::put('user/bank/update/{id}', [BankInfoController::class, 'update'])->name('update.user.bank');

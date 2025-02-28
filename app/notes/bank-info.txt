@@ -15,7 +15,8 @@ $(function () {
         var lastName = $(this).closest("tr").find(".user-last-name").text();
         $("#user-info").text(firstName + " " + lastName);
         $("#bank-user-modal").show();
-
+        // display bank user info modal
+        // fetch current user info from server
         $.ajax({
             url: "/user/bank/index/" + userId,
             method: "GET",
@@ -23,7 +24,7 @@ $(function () {
                 if (response.status === "success") {
 
                     $("#bank-id").val(response.data.id);
-                    $("#account_number").val(response.data.account_number);
+                    $("#accuont_number").val(response.data.account_number);
                     $("#bank_name").val(response.data.bank_name);
                     $("#shaba_number").val(response.data.shaba_number);
 
@@ -73,60 +74,45 @@ $(function () {
                     });//end update submtion
                 } else {
                     //try to insert new user bank info
+                    var insertData = {
+                        user_id: userId,//user id
+                        account_number: $("#accuont_number").val(),
+                        bank_name: $("#bank_name").val(),
+                        shaba_number: $("#shaba_number").val(),
+                    };
 
-
-                    form.on("submit", function (e) {
+                    form.on("submit",function(e){
                         e.preventDefault();
-                        var insertData = {
-                            user_id: userId,//user id
-                            account_number: $("#account_number").val(),
-                            bank_name: $("#bank_name").val(),
-                            shaba_number: $("#shaba_number").val(),
-                        };
 
                         $.ajax({
                             url: "/user/bank/store",
                             method: "POST",
-
-                            data: insertData,
                             headers: {
                                 'X-CSRF-Token': csrfToken
                             },
+                            data: insertData,
                             success: function (response) {
                                 if (response.status === "success") {
-                                    // Display success message and hide the modal
-                                    alert(response.message); // Consider replacing with a more user-friendly notification
+                                    alert(response.message);
                                     $("#bank-user-modal").hide();
                                 } else {
-                                    // Display failure message
                                     alert(response.message);
                                 }
                             },
                             error: function (xhr) {
-                                try {
-                                    // Parse error details from the response
-                                    var errors = xhr.responseJSON.errors;
-
-                                        if (response.errors) {
-                                            for (var field in response.errors) {
-                                                $('#' + field + '_error').text(response.errors[field][0]).show();
-                                            }
-                                        }else {
-
-                                        // Handle cases where the server does not return a valid JSON response
-                                        alert("An unexpected error occurred. Please try again later.");
+                                var errors = xhr.responseJSON.errors;
+                                var errorMessages = 'Insert new data failed:\n';
+                                for (var key in errors) {
+                                    if (errors.hasOwnProperty(key)) {
+                                        errorMessage += errors[key].join("\n") + "\n";
                                     }
-                                } catch (e) {
-                                    // Catch any unexpected errors during error handling
-                                    alert("An error occurred while processing your request. Please try again later.");
                                 }
+                                //alert(errorMessages);
                             }
+                        });//end  ajax for insert new record
+                    });
 
-                        });
-                       // End of AJAX call
-                    }); // End of form submit event listener//end submitform
-
-
+                    alert(response.message);
                 }
             },//end success sction
             //================handel error when fetching data==========================
@@ -143,7 +129,6 @@ $(function () {
         });
 
     });
-
 
     $("#close-bank-amodal").on("click", function () {
 

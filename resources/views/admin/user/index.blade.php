@@ -81,11 +81,11 @@
                                     <div class="col">
                                         <div class="row ">
                                             <a href="#" data-id="{{ $user->id }}"
-                                                class="link link-blue user-address">آدرس</a>
+                                                class="link link-blue user-address">اطلاعات تماس</a>
                                             {{-- {{ url('user/address/edit/'. $user->id) }} --}}
                                         </div>
                                         <div class="mt-2 row">
-                                            <a href="#" class="link link-yellow bank_info_link">اطلاعات بانکی
+                                            <a href="#" data-id="{{ $user->id }}"   class="link link-yellow bank_info_link">اطلاعات بانکی
                                             </a>
                                         </div>
                                         <div class="mt-2 row">
@@ -150,6 +150,61 @@
         </div>
     </div>
     {{-- End Address Modal --}}
+
+
+{{-- ========================================================================= --}}
+ {{-- Start bank info modal --}}
+    <div id="bank-user-modal" class="modal " tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="row">
+                        <img id="user-image" src="" class="user-image" alt="User Image">
+                        <div id="user-info" class="modal-title"></div>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    {{-- Start address form --}}
+                    <form id="bank-info-form">
+                        <div class="form-group">
+                            <input type="text" hidden class="form-control" name="bank-id" id="bank-id">
+                            <span id="bank_id_error" class="error-message text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input type="text"  hidden class="form-control" name="bank-id" id="bank-id">
+                            <span id="bank_id_error" class="error-message text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="">شماره حساب:</label>
+                            <input type="text" class="form-control" id="account_number" name="">
+                            <span id="accuont_number_error" class="error-message"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="">نام بانک:</label>
+                            <input type="text" class="form-control" id="bank_name" name="">
+                            <span id="bank_name_error" class="error-message"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="">شماره شبا</label>
+                            <input type="text" class="form-control" id="shaba_number" name="">
+                            <span id="shaba_number_error" class="error-message"></span>
+                        </div>
+                        <button id="save-bank-button" type="submit" class="btn btn-primary">ذخیره</button>
+
+                    </form>
+                    {{-- End address form --}}
+
+                </div>
+                <div class="modal-footer">
+                    <button id="close-bank-amodal" type="button" class="btn btn-secondary"
+                        data-bs-dismiss="modal">بستن</button>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
     {{-- Start bank info modal --}}
 
     {{-- End bank info modal --}}
