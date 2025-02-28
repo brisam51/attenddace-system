@@ -12,4 +12,5 @@
 <script src="{{asset('dashboard/js/custom.js')}}"></script>
 <script src="{{asset('dashboard/js/address-modal.js')}}"></script>
 <script src="{{asset('dashboard/js/bank_user_info.js')}}"></script>
+<script src="{{asset('dashboard/js/job_details.js')}}"></script>
 @yield('script')

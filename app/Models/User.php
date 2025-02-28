@@ -64,6 +64,9 @@ class User extends Authenticatable
         return $this->hasMany(BankInfo::class);
     }
 
+    public function jobs(){
+        return $this->hasMany(JobDetails::class);
+    }
     //===================End Relationships===============
 
 }

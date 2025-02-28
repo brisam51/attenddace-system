@@ -89,7 +89,7 @@
                                             </a>
                                         </div>
                                         <div class="mt-2 row">
-                                            <a href="http://" class="link link-gray">اطلاعات شغلی</a>
+                                            <a href="#" class="link link-gray job-link" data-id="{{ $user->id }}">اطلاعات شغلی</a>
                                         </div>
                                     </div>
                                 </td>
@@ -205,9 +205,68 @@
             </div>
         </div>
     </div>
-    {{-- Start bank info modal --}}
+
 
     {{-- End bank info modal --}}
+    {{---------------------------------- Start Job Details Modal --}}
+    <div id="job-details-modal" class="modal " tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="row">
+                        <img id="user-image" src="" class="user-image" alt="User Image">
+                        <div id="user-info" class="modal-title"></div>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    {{-- Start address form --}}
+                    <form id="bank-info-form">
+                        <div class="form-group">
+                            <input type="text" hidden class="form-control" name="job-details-id" id="job-details-id">
+                            <span id="job-details-id_error" class="error-message text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input type="text"  hidden class="form-control" name="user_id" id="user_id">
+                            <span id="user_id_error" class="error-message text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="">عنوان شغلی: </label>
+                            <input type="text" class="form-control" id="job_title" name="">
+                            <span id="job_title_error" class="error-message"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for=""> شرح شغل</label>
+                            <input type="text" class="form-control" id="job_description" name="">
+                            <span id="job_description_error" class="error-message"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="">شماره بیمه</label>
+                            <input type="text" class="form-control" id="job_insurance_code" name="">
+                            <span id="job_insurance_code_error" class="error-message"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for=""> تاریخ استخدام:</label>
+                            <input type="text" class="form-control" id="date_employment" name="">
+                            <span id="job_insurance_code_error" class="error-message"></span>
+                        </div>
+                        <button id="save-job-button" type="submit" class="btn btn-primary">ذخیره</button>
+
+                    </form>
+                    {{-- End address form --}}
+
+                </div>
+                <div class="modal-footer">
+                    <button id="close-job-amodal" type="button" class="btn btn-secondary"
+                        data-bs-dismiss="modal">بستن</button>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{----------------------------------- Start Job Details Modal --}}
 @endsection
 @section('scripts')
 @endsection

@@ -4,8 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AddressController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\BankInfoController;
+use App\Http\Controllers\Admin\JobDetailsController;
 
-Route::get('/',function(){
+Route::get('/', function () {
     return view('admin.user.dashboard');
 });
 
@@ -27,3 +28,8 @@ Route::put('user/address/update/{id}', [AddressController::class, 'update'])->na
 Route::get('user/bank/index/{id}', [BankInfoController::class, 'fetchDataById'])->name('get.user.bank');
 Route::post('user/bank/store', [BankInfoController::class, 'store']);
 Route::put('user/bank/update/{id}', [BankInfoController::class, 'update'])->name('update.user.bank');
+//Job Details
+Route::get('user/job/index/{id}', [JobDetailsController::class, 'fetchDataById'])->name('get.user.job');
+Route::post('user/job/store', [JobDetailsController::class, 'store']);
+Route::put('user/job/update/{id}', [JobDetailsController::class, 'update'])->name('update.user.job');
+//Document Details
