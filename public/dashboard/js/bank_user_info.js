@@ -7,7 +7,6 @@ $(function () {
 
         event.preventDefault();
         var userId = $(this).data("id");
-
         var userImage = $(this).closest("tr").find(".user-image").attr("src");
         //upload user image to top of modal
         $("#user-image").attr("src", userImage);

@@ -209,13 +209,13 @@
 
     {{-- End bank info modal --}}
     {{---------------------------------- Start Job Details Modal --}}
-    <div id="job-details-modal" class="modal " tabindex="-1">
+    <div id="jobDetails-modal" class="modal " tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="row">
-                        <img id="user-image" src="" class="user-image" alt="User Image">
-                        <div id="user-info" class="modal-title"></div>
+                        <img id="user-job-image" src="" class="user-image" alt="User Image">
+                        <div id="user-job-info" class="modal-title"></div>
                     </div>
                 </div>
                 <div class="modal-body">
