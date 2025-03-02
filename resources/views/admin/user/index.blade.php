@@ -246,8 +246,9 @@
                             <span id="job_insurance_code_error" class="error-message"></span>
                         </div>
                         <div class="form-group">
-                            <label for=""> تاریخ استخدام:</label>
-                            <input type="text" class="form-control" id="date_employment" name="">
+                            <label for=""  id=""> تاریخ استخدام:</label>
+                            <input type="text" class="form-control" id="persainDate" name="">
+                            <input type="hidden" class="form-control" id="gregorianDate" name="">
                             <span id="job_insurance_code_error" class="error-message"></span>
                         </div>
                         <button id="save-job-button" type="submit" class="btn btn-primary">ذخیره</button>
