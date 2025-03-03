@@ -220,7 +220,7 @@
                 </div>
                 <div class="modal-body">
                     {{-- Start address form --}}
-                    <form id="bank-info-form">
+                    <form id="jobDetails-form">
                         <div class="form-group">
                             <input type="text" hidden class="form-control" name="job-details-id" id="job-details-id">
                             <span id="job-details-id_error" class="error-message text-danger"></span>
