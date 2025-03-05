@@ -220,7 +220,7 @@
                 </div>
                 <div class="modal-body">
                     {{-- Start address form --}}
-                    <form id="bank-info-form">
+                    <form id="job-info-form">
                         <div class="form-group">
                             <input type="text" hidden class="form-control" name="job-details-id" id="job-details-id">
                             <span id="job-details-id_error" class="error-message text-danger"></span>
@@ -247,7 +247,7 @@
                         </div>
                         <div class="form-group">
                             <label for=""  id=""> تاریخ استخدام:</label>
-                            <input type="text" class="form-control" id="persainDate" name="">
+                            <input type="text" class="form-control" id="date_employment" name="">
                             <input type="hidden" class="form-control" id="gregorianDate" name="">
                             <span id="job_insurance_code_error" class="error-message"></span>
                         </div>
