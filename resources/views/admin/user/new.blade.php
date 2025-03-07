@@ -10,6 +10,21 @@
     <script></script>
 @endsection
 @section('content')
+<div>
+    @if (session()->has('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+
+    @endif
+    @if (session()->has('error'))
+    <div class="alert alert-success">
+        {{ session('error') }}
+    </div>
+
+@endif
+
+</div>
     <h3>ثبت کاربر جدید</h3>
 
     <form action="{{ url('user/store') }}" method="POST"   enctype="multipart/form-data">
@@ -52,7 +67,7 @@
                 <div class="form-group">
                     <label for="exampleInputPassword1">وضعیت فعالیتی</label>
                     <select name="work_status" class="form-control">
-                        <option value="avtive" {{ old('work_status') == 'active' ? 'selected' : '' }}>فعال</option>
+                        <option value="active" {{ old('work_status') == 'active' ? 'selected' : '' }}>فعال</option>
                         <option value="inactive" {{ old('work_status') == 'inactive' ? 'selected' : '' }}>غیرفعال</option>
                     </select>
                     @error('work_status')

@@ -85,11 +85,13 @@
                                             {{-- {{ url('user/address/edit/'. $user->id) }} --}}
                                         </div>
                                         <div class="mt-2 row">
-                                            <a href="#" data-id="{{ $user->id }}"   class="link link-yellow bank_info_link">اطلاعات بانکی
+                                            <a href="#" data-id="{{ $user->id }}"
+                                                class="link link-yellow bank_info_link">اطلاعات بانکی
                                             </a>
                                         </div>
                                         <div class="mt-2 row">
-                                            <a href="#" class="link link-gray job-link" data-id="{{ $user->id }}">اطلاعات شغلی</a>
+                                            <a href="#" class="link link-gray job-link"
+                                                data-id="{{ $user->id }}">اطلاعات شغلی</a>
                                         </div>
                                     </div>
                                 </td>
@@ -152,8 +154,8 @@
     {{-- End Address Modal --}}
 
 
-{{-- ========================================================================= --}}
- {{-- Start bank info modal --}}
+    {{-- ========================================================================= --}}
+    {{-- Start bank info modal --}}
     <div id="bank-user-modal" class="modal " tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -171,7 +173,7 @@
                             <span id="bank_id_error" class="error-message text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <input type="text"  hidden class="form-control" name="bank-id" id="bank-id">
+                            <input type="text" hidden class="form-control" name="bank-id" id="bank-id">
                             <span id="bank_id_error" class="error-message text-danger"></span>
                         </div>
 
@@ -208,7 +210,7 @@
 
 
     {{-- End bank info modal --}}
-    {{---------------------------------- Start Job Details Modal --}}
+    {{-- -------------------------------- Start Job Details Modal --}}
     <div id="jobDetails-modal" class="modal " tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -219,18 +221,14 @@
                     </div>
                 </div>
                 <div class="modal-body">
-                    {{-- Start address form --}}
-<<<<<<< HEAD
-                    <form id="job-info-form">
-=======
-                    <form id="jobDetails-form">
->>>>>>> 2707fa20e84d1fce278c4a2dc7e3bedc49bcf397
+                    {{-- Start job details form --}}
+                    <form id="job-details-form">
                         <div class="form-group">
                             <input type="text" hidden class="form-control" name="job-details-id" id="job-details-id">
                             <span id="job-details-id_error" class="error-message text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <input type="text"  hidden class="form-control" name="user_id" id="user_id">
+                            <input type="text" hidden class="form-control" name="user_id" id="user_id">
                             <span id="user_id_error" class="error-message text-danger"></span>
                         </div>
 
@@ -250,8 +248,8 @@
                             <span id="job_insurance_code_error" class="error-message"></span>
                         </div>
                         <div class="form-group">
-                            <label for=""  id=""> تاریخ استخدام:</label>
-                            <input type="text" class="form-control" id="date_employment" name="">
+                            <label for="" id=""> تاریخ استخدام:</label>
+                            <input type="text" class="form-control" id="date_employment" name="" style="font-family: 'yekan' ">
                             <input type="hidden" class="form-control" id="gregorianDate" name="">
                             <span id="job_insurance_code_error" class="error-message"></span>
                         </div>
@@ -271,7 +269,7 @@
         </div>
     </div>
 
-    {{----------------------------------- Start Job Details Modal --}}
+    {{-- --------------------------------- Start Job Details Modal --}}
 @endsection
 @section('scripts')
 @endsection

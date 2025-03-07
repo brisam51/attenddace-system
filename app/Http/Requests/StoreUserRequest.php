@@ -24,13 +24,13 @@ class StoreUserRequest extends FormRequest
         return [
             "first_name" => 'required|string|max:255',
             "last_name" => 'required|string|max:255',
-            "national_id" => 'required|digits:10|numeric|unique:users,national_id',
-            "card_id" => 'required|digits:8|numeric|unique:users,card_id',
+            "national_id" => ['required','min:10','numeric','unique:users,national_id'],
+            "card_id" => 'required|min:8|numeric|unique:users,card_id',
             "birth_date" => 'required',
-            "work_status" => 'required',
+            "work_status" => 'nullable|in:active,inactive',
             "email" => 'required|email|unique:users,email',
-            "role" => 'required',
-             "image" => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            "role" => 'nullable|in:supperadmin,admin,user',
+             "image" => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048|dimensions:min_width=100,min_height=100',
             "password" => 'required|min:8',
         ];
     }

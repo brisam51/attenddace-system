@@ -14,10 +14,12 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 
+use Illuminate\Support\Facades\Log;
 class UserController extends Controller
 {
 
-    public function dashboard(){
+    public function dashboard()
+    {
         return view(('admin.dashboard'));
     }
     /**
@@ -35,9 +37,9 @@ class UserController extends Controller
         return response()->json([
             'status' => 'success',
             'data' => [
-                'first_name'=>$user->first_name,
-                'last_name'=>$user->last_name,
-                'image'=>$user->image
+                'first_name' => $user->first_name,
+                'last_name' => $user->last_name,
+                'image' => $user->image
             ]
         ]);
     }
@@ -47,12 +49,14 @@ class UserController extends Controller
         return view('admin.user.new');
     }
 
+
+
+    //Insert new record StoreUserRequest
     public function store(StoreUserRequest $request)
     {
-
-
         try {
             $personData = $request->validated();
+            $imagePath = null;
             //Handel Upload Image....
             if ($request->hasFile('image')) {
                 $image =   $request->file('image');
@@ -60,23 +64,27 @@ class UserController extends Controller
                 $image->move(public_path('assets/images'), $imageName); // Save image to public/assets/images
                 $imagePath = 'assets/images/' . $imageName; // Relative path for database
             }
-            $person = new User();
-            //['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹']
-           $person->first_name = $personData['first_name'];
-            $person->last_name = $personData['last_name'];
-            $person->national_id = $personData['national_id'];
-            $person->card_id = $personData['card_id'];
-            $person->birth_date = DateHeplers::persianToEnglishDate($personData['birth_date']);
-            $person->email = $personData['email'];
-            $person->image =  $imagePath;
-            $person->password = Hash::make($personData['password']);
-            $person->role = $personData['role'];
-            $person->work_status = $personData['work_status'];
-            $person->save();
+            $user = new User();
+            $personData["image"] = $imagePath;
+            $birthdate = DateHeplers::persianToEnglishDate($personData['birth_date']);
+            $user->first_name = $personData['first_name'];
+            $user->last_name = $personData['last_name'];
+            $user->national_id = $personData['national_id'];
+            $user->card_id = $personData['card_id'];
+            $user->birth_date = $birthdate;
+            $user->email = $personData['email'];
+            $user->image =  $imagePath;
+            $user->password = Hash::make($personData['password']);
+            $user->role = $personData['role'];
+            $user->work_status = $personData['work_status'];
+            $user->save();
 
             return redirect('user/index')->with('success', 'New record recorded successfully');
         } catch (Exception $e) {
-            return redirect()->back()->withInput();
+            Log::error('User creation failed: ' . $e->getMessage()); // Log the error
+            return redirect()->back()
+                ->withErrors(['error' => 'Failed to create user. Please try again.'])
+                ->withInput();
         }
     }
 
