@@ -44,15 +44,22 @@ $(function () {
                     //update current  record
                     form.on("submit", function (e) {
                         e.preventDefault();
-                        //gregorianDate
-                        
 
+                        var updateData = {
+                            id: $("#job-id").val(),
+                            job_title: $("#job_title").val(),
+                            job_description: $("#job_description").val(),
+                            job_insurance_code: $("#job_insurance_code").val(),
+                            date_employment: $("#date_employment").val(),
+                            user_id: userId,
+
+                        };
                         //Update Current record.*
 
                         $.ajax({
-                            url: "/user/job/update" + userId,
+                            url: "/user/job/update/" + userId,
                             method: "PUT",
-                            data: formData,
+                            data: updateData,
                             headers: {
                                 'X-CSRF-Token': csrfToken // Add CSRF token to headers
                             },
@@ -71,38 +78,38 @@ $(function () {
 
                         }); //end of ajax
                     });
-                }else{
-                   form.on("submit",function(){
-                    var formData = {
-                        job_title: $("#job_title").val(),
-                        job_description: $("#job_description").val(),
-                        job_insurance_code: $("#job_insurance_code").val(),
-                        date_employment: $("#date_employment").val(),
-                        user_id:userId,
-                    };
-                    $.ajax({
-                        url:"/user/job/create",
-                        method:"POST",
-                        data:formData,
-                        headers: {
-                            'X-CSRF-Token': csrfToken // Add CSRF token to headers
-                        },
-                        success: function (response) {
-                            if (response.status == "success") {
-                                alert("Job created successfully");
-                                $("#jobDetails-modal").hide();
-                            } else {
-                                alert("Failed to create job");
+                } else {
+                    form.on("submit", function () {
+                        var insertData = {
+                            job_title: $("#job_title").val(),
+                            job_description: $("#job_description").val(),
+                            job_insurance_code: $("#job_insurance_code").val(),
+                            date_employment: $("#date_employment").val(),
+                            user_id: userId,
+                        };
+                        $.ajax({
+                            url: "/user/job/create",
+                            method: "POST",
+                            data: insertData,
+                            headers: {
+                                'X-CSRF-Token': csrfToken // Add CSRF token to headers
+                            },
+                            success: function (response) {
+                                if (response.status == "success") {
+                                    alert("Job created successfully");
+                                    $("#jobDetails-modal").hide();
+                                } else {
+                                    alert("Failed to create job");
+                                }
+                            },
+                            error: function (xhr) {
+                                var errorMessag = "Failed to fetch data  :\n";
+                                console.log(errorMessag + xhr.responseText);
                             }
-                        },
-                        error: function (xhr) {
-                            var errorMessag = "Failed to fetch data  :\n";
-                            console.log(errorMessag + xhr.responseText);
-                        }
+                        });
                     });
-                   }) ;
                 }
-              
+
 
 
 
