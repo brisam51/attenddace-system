@@ -24,14 +24,19 @@ $(function () {
 
             }
         });
+
+        //clear Textfields
+        $("#job_title").val(''); //set job title
+        $("#job_description").val(''); //set job description
+        $("#job_insurance_code").val('');
+        $("#date_employment").val('');
         //get job details
         $.ajax({
             url: "/user/job/index/" + userId,
             method: "GET",
             success: function (response) {
                 if (response.status == "success") {
-
-
+                    $("#job-id").val(response.data.id)
                     $("#job_title").val(response.data.job_title); //set job title
                     $("#job_description").val(response.data.job_description); //set job description
                     $("#job_insurance_code").val(response.data.job_insurance_code);
@@ -40,17 +45,12 @@ $(function () {
                     form.on("submit", function (e) {
                         e.preventDefault();
                         //gregorianDate
-                        var formData = {
-                            job_title: $("#job_title").val(),
-                            job_description: $("#job_description").val(),
-                            job_insurance_code: $("#job_insurance_code").val(),
-                            date_employment: $("#date_employment").val(),
-                        };
-                        console.log(formData);
+                        
 
+                        //Update Current record.*
 
                         $.ajax({
-                            url: "/user/job/update/" + userId,
+                            url: "/user/job/update" + userId,
                             method: "PUT",
                             data: formData,
                             headers: {
@@ -59,30 +59,9 @@ $(function () {
                             success: function (response) {
                                 if (response.status == "success") {
                                     alert("Job updated successfully");
+                                    $("#jobDetails-modal").hide();
                                 } else {
-                                    var insertData = {
-                                        job_title: $("#job_title").val(),
-                                        job_description: $("#job_description").val(),
-                                        job_insurance_code: $("#job_insurance_code").val(),
-                                        date_employment: $("#date_employment").val(),
-                                        user_id: userId,
-                                    };
-
-                                    $.ajax({
-                                        url: "/user/job/create",
-                                        method: "POST",
-                                        data: insertData,
-                                        headers: {
-                                            'X-CSRF-Token': csrfToken // Add CSRF token to headers
-                                        },
-                                        success: function (response) {
-                                            if (response.status == "success") {
-                                                alert(response.message);    
-                                            } else {
-                                                alert(response.message);
-                                            }
-                                        }
-                                    });
+                                    alert("Job updated Fails");
                                 }
                             },
                             error: function (xhr) {
@@ -92,11 +71,42 @@ $(function () {
 
                         }); //end of ajax
                     });
-                } else {
-                    //
+                }else{
+                   form.on("submit",function(){
+                    var formData = {
+                        job_title: $("#job_title").val(),
+                        job_description: $("#job_description").val(),
+                        job_insurance_code: $("#job_insurance_code").val(),
+                        date_employment: $("#date_employment").val(),
+                        user_id:userId,
+                    };
+                    $.ajax({
+                        url:"/user/job/create",
+                        method:"POST",
+                        data:formData,
+                        headers: {
+                            'X-CSRF-Token': csrfToken // Add CSRF token to headers
+                        },
+                        success: function (response) {
+                            if (response.status == "success") {
+                                alert("Job created successfully");
+                                $("#jobDetails-modal").hide();
+                            } else {
+                                alert("Failed to create job");
+                            }
+                        },
+                        error: function (xhr) {
+                            var errorMessag = "Failed to fetch data  :\n";
+                            console.log(errorMessag + xhr.responseText);
+                        }
+                    });
+                   }) ;
                 }
+              
 
-            },
+
+
+            },//end sucess
             erorr: function (xhr) {
                 var errorMessag = "Failed to fetch data  :\n";
                 if (xhr.responseJSON && xhr.responseJSON.message) {
@@ -109,8 +119,13 @@ $(function () {
                 }
                 alert(errorMessag);
             },
+
         });
 
+
         $("#jobDetails-modal").show();
+    });
+    $("#close-job-amodal").on("click", function () {
+        $("#jobDetails-modal").hide();
     });
 });

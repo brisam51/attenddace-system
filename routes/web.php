@@ -30,6 +30,6 @@ Route::post('user/bank/store', [BankInfoController::class, 'store']);
 Route::put('user/bank/update/{id}', [BankInfoController::class, 'update'])->name('update.user.bank');
 //Job Details
 Route::get('user/job/index/{id}', [JobDetailsController::class, 'fetchDataById'])->name('get.user.job');
-Route::post('user/job/store', [JobDetailsController::class, 'store']);
+Route::post('user/job/create', [JobDetailsController::class, 'store']);
 Route::put('user/job/update/{id}', [JobDetailsController::class, 'update'])->name('update.user.job');
 //Document Details

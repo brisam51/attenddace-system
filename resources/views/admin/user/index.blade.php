@@ -224,7 +224,7 @@
                     {{-- Start job details form --}}
                     <form id="job-details-form">
                         <div class="form-group">
-                            <input type="text" hidden class="form-control" name="job-details-id" id="job-details-id">
+                            <input type="text" hidden class="form-control" name="job-id" id="job-id">
                             <span id="job-details-id_error" class="error-message text-danger"></span>
                         </div>
                         <div class="form-group">

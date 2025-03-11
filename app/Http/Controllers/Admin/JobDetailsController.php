@@ -14,10 +14,11 @@ class JobDetailsController extends Controller
     public function fetchDataById($id)
     {
         $jobs = JobDetails::where('user_id', $id)->first();
-        $gregorianDate = Carbon::parse($jobs['date_employment']);
+        
+        if (!empty( $jobs)) {
+            $gregorianDate = Carbon::parse($jobs['date_employment']);
         $jobs['date_employment'] = DateHeplers::englishToPersianNumber(Jalalian::fromCarbon($gregorianDate)->format('Y/m/d'));
         $jobs['job_insurance_code'] = DateHeplers::englishToPersianNumber($jobs['job_insurance_code']);
-        if (!empty($jobs)) {
             return response()->json([
                 "status" => "success",
                 "data" => [
@@ -29,12 +30,36 @@ class JobDetailsController extends Controller
 
                 ],
             ]);
+        } else {
+            return response()->json(["data"=>""]);
         }
+    }
+
+    //insert  new  record
+    public function store(Request $request)
+    {
+        // 'user_id','job_title','job_description','job_insurance_code','date_employment'
+        $validated = $request->validate([
+            'user_id' => 'required',
+            'job_title' => 'required',
+            'job_description' => 'required',
+            'job_insurance_code' => 'required',
+            'date_employment' => 'required',
+
+        ]);
+        $job = new JobDetails();
+        $validated['date_employment'] = DateHeplers::persianToEnglishDate($request->date_employment);
+        $job->create( $validated);
+        return response()->json([
+            "status" => "success",
+            "message" => "new record added successfully"
+
+        ]);
     }
     //update current record
     public function update(Request $request, $id)
     {
-       $validate=$request->validate([
+        $validate = $request->validate([
             'job_title' => 'required',
             'job_insurance_code' => 'required',
             'job_description' => 'required',
@@ -50,10 +75,6 @@ class JobDetailsController extends Controller
         ]);
         return response()->json([
             "status" => "success",
-       ]);
-
-        // $jobs = JobDetails::where('user_id', $id)->first();
-
-
-    }
-}
+        ]);
+    } //end update function
+}//end class
