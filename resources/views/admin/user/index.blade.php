@@ -78,21 +78,13 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="col">
-                                        <div class="row ">
-                                            <a href="#" data-id="{{ $user->id }}"
-                                                class="link link-blue user-address">اطلاعات تماس</a>
-                                            {{-- {{ url('user/address/edit/'. $user->id) }} --}}
-                                        </div>
-                                        <div class="mt-2 row">
-                                            <a href="#" data-id="{{ $user->id }}"
-                                                class="link link-yellow bank_info_link">اطلاعات بانکی
-                                            </a>
-                                        </div>
-                                        <div class="mt-2 row">
-                                            <a href="#" class="link link-gray job-link"
-                                                data-id="{{ $user->id }}">اطلاعات شغلی</a>
-                                        </div>
+                                    <div class="circle-container">
+                                       <a href="#" data-id="{{$user->id }}"  class="user-address"><div class="circle-quarter quarter-1">اطلاعات تماس</div></a>
+                                       <a href="#" data-id="{{$user->id }}"  class="bank_info_link"><div class="circle-quarter quarter-2" style="text-align: left" >اطلاعات بانکی</div></a>
+                                       <a href="#" data-id="{{$user->id }}"  class="job-link"><div class="circle-quarter quarter-3">اطلاعات شغلی</div></a>
+                                       <a href="#" data-id="{{$user->id }}"  class=""><div class="circle-quarter quarter-4" style="text-align: left">مستندات</div></a>
+
+                                       
                                     </div>
                                 </td>
                             </tr>
@@ -244,7 +236,7 @@
                         </div>
                         <div class="form-group">
                             <label for="">شماره بیمه</label>
-                            <input type="text" class="form-control" id="job_insurance_code" name="">
+                            <input type="text" class="form-control persian-number" id="job_insurance_code" name="">
                             <span id="job_insurance_code_error" class="error-message"></span>
                         </div>
                         <div class="form-group">

@@ -47,7 +47,7 @@
             </div>
             <div class="form-group">
                 <label for="exampleInputEmail1">شماره ملی</label>
-                <input type="text" name="national_id" class="form-control" value="{{ old('national_id') }}">
+                <input type="text" name="national_id" class="form-control  " value="{{ old('national_id') }}">
                 @error('national_id')
                     <span class="text-danger">{{ $message }}</span>
                 @enderror

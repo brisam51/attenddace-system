@@ -11,9 +11,13 @@
                 class="fas fa-fan fa-spin mr-1"></i>داشبورد </a>
     </li>
 
-    <li class="side a-collapse short ">
-        <a href="{{ url('user/index') }}" class="side-item @if (Request::segment(2) == 'index' || 'new') selected @endif"><i
+    <li class="side a-collapse short " style="margin-bottom: 10px;">
+        <a href="{{ url('user/index') }}" class="side-item @if (Request::segment(1) == 'user' ) bg-primary text-whaite @endif"><i
                 class="fas fa-fan fa-spin mr-1"></i>مدیریت کاربران</a>
+    </li>
+    <li class="side a-collapse short ">
+        <a href="{{ url('projects/index') }}" class="side-item @if (Request::segment(1) == 'projects') bg-primary text-white @endif"><i
+                class="fas fa-fan fa-spin mr-1"></i>مدیریت پروژه ها</a>
     </li>
     <ul class="side a-collapse short ">
         <a class="ul-text  fnt-mxs"><i class="fas fa-tachometer-alt mr-1"></i> صفحه

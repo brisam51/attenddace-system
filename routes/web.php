@@ -1,8 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\AddressController;
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\AddressController;
 use App\Http\Controllers\Admin\BankInfoController;
 use App\Http\Controllers\Admin\JobDetailsController;
 
@@ -32,4 +33,11 @@ Route::put('user/bank/update/{id}', [BankInfoController::class, 'update'])->name
 Route::get('user/job/index/{id}', [JobDetailsController::class, 'fetchDataById'])->name('get.user.job');
 Route::post('user/job/create', [JobDetailsController::class, 'store']);
 Route::put('user/job/update/{id}', [JobDetailsController::class, 'update'])->name('update.user.job');
-//Document Details
+//Project
+Route::get("projects/index", [ProjectController::class, 'index'])->name('projects.index');
+Route::get("projects/create", [ProjectController::class, 'create'])->name('projects.create');
+Route::post("projects/store", [ProjectController::class, 'store'])->name('projects.store');
+Route::get("projects/edit/{id}", [ProjectController::class, 'edit'])->name('projects.edit');
+Route::put("projects/update/{id}", [ProjectController::class, 'update'])->name('projects.update');
+Route::delete("projects/delete/{id}", [ProjectController::class, 'delete'])->name('projects.delete');
+

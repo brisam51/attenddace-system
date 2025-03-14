@@ -67,6 +67,9 @@ class User extends Authenticatable
     public function jobs(){
         return $this->hasMany(JobDetails::class);
     }
+    public function  documents(){
+    return $this->hasMany(Document::class);
+    }
     //===================End Relationships===============
 
 }

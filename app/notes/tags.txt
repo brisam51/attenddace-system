@@ -1,0 +1,18 @@
+ <div class="row ">
+                                            <a href="#" data-id="{{ $user->id }}"
+                                                class="link link-blue user-address circle-link">اطلاعات تماس</a>
+                                            {{-- {{ url('user/address/edit/'. $user->id) }} --}}
+                                        </div>
+                                        <div class="mt-2 row">
+                                            <a href="#" data-id="{{ $user->id }}"
+                                                class="link link-yellow bank_info_link circle-link">اطلاعات بانکی
+                                            </a>
+                                        </div>
+                                        <div class="mt-2 row">
+                                            <a href="#" class="link link-gray job-link circle-link"
+                                                data-id="{{ $user->id }}">اطلاعات شغلی</a>
+                                        </div>
+                                        <div class="mt-2 row">
+                                            <a href="#" class="link link-green doc-link circle-link"
+                                                data-id="{{ $user->id }}">مستندات </a>
+                                        </div>
