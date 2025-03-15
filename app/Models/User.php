@@ -70,6 +70,10 @@ class User extends Authenticatable
     public function  documents(){
     return $this->hasMany(Document::class);
     }
+
+    public function projects(){
+        return  $this->belongsToMany(Project::class,'project_user');
+    }
     //===================End Relationships===============
 
 }

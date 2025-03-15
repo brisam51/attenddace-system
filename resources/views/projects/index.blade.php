@@ -42,6 +42,7 @@
                             <th scope="col"> شرح پروژه </th>
                             <th scope="col"> وضعیت پروژه  </th>
                             <th scope="col"> عملیات</th>
+                            <th scope="col">اعضای پروژه</th>
     
                         </tr>
                     </thead>
@@ -77,10 +78,11 @@
                                     <div class="d-flex gap-2">
                                         <a href="{{ route('projects.edit', $value->id) }}" class="btn btn-warning">ویرایش</a>
                                         <a href="{{ route('projects.delete', $value->id) }}" class="btn btn-danger">حذف</a>
-                                    </div>
-                                    
-                                   
+                                    </div>                                                                     
                                 </td>
+<td>
+    <a href="{{ route('projects.members', $value->id) }}"  class="btn btn-primary">اعضای پروژه</a>
+</td>
     
                             </tr>
                         @endforeach
