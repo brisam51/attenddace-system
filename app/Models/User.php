@@ -64,10 +64,7 @@ class User extends Authenticatable
         return $this->hasMany(BankInfo::class);
     }
 
-    public function jobs(){
-        return $this->hasMany(JobDetails::class);
-    }
-    public function  documents(){
+        public function  documents(){
     return $this->hasMany(Document::class);
     }
 

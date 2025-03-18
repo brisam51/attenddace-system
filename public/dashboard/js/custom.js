@@ -42,7 +42,7 @@ function toPersianNumber(number) {
 // Convert numbers in specific table cells to Persian digits
 function ConverttoPersianTableNumber() {
     // Target only specific classes: national-id, card-id, and birth-date
-    $('.national-id, .card-id, .birth-date,.birth_date-lable,.input-form,form-control ,.start_date, .end_date').each(function() {
+    $('.national-id, .card-id, .birth-date,.birth_date-lable,.input-form,form-control ,.start_date, .end_date,.job_code,.job-hourly-wages').each(function() {
         var cellText = $(this).text();
         var inputText = $(this).val();
         // Replace all numbers in the cell text with Persian digits

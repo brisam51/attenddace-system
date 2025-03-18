@@ -13,11 +13,10 @@ return new class extends Migration
     {
         Schema::create('job_details', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->integer('job_code');
             $table->string('job_title');
             $table->string('job_description');
-            $table->string('job_insurance_code');
-            $table->date('date_employment');
+            $table->integer('hourly_wages');
             $table->timestamps();
         });
     }

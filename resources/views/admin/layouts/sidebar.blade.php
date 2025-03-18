@@ -5,19 +5,22 @@
             </object>
         </a>
     </header>
-    <p class="side-comment  fnt-mxs">گشت</p>
+   
     <li class="side a-collapse short ">
         <a href="{{ url('/') }}" class="side-item "><i
-                class="fas fa-fan fa-spin mr-1"></i>داشبورد </a>
+                class="fa fa-desktop mr-2" style="font-size: 18px"></i>داشبورد </a>
     </li>
 
     <li class="side a-collapse short " style="margin-bottom: 10px;">
-        <a href="{{ url('user/index') }}" class="side-item @if (Request::segment(1) == 'user' ) bg-primary text-whaite @endif"><i
-                class="fas fa-fan fa-spin mr-1"></i>مدیریت کاربران</a>
+        <a href="{{ url('user/index') }}" class="side-item @if (Request::segment(1) == 'user' ) bg-primary text-whaite @endif"><i class="fa fa-users mr-2" aria-hidden="true" style="font-size: 20px;"></i>مدیریت کاربران</a>
     </li>
     <li class="side a-collapse short ">
         <a href="{{ url('projects/index') }}" class="side-item @if (Request::segment(1) == 'projects') bg-primary text-white @endif"><i
-                class="fas fa-fan fa-spin mr-1"></i>مدیریت پروژه ها</a>
+                class="fa fa-folder-open mr-2" style="font-size: 20px;" aria-hidden="true"></i>مدیریت پروژه ها</a>
+    </li>
+    <li class="side a-collapse short ">
+        <a href="{{ url('jobs/index') }}" class="side-item @if(Request::segment(1) == 'jobs')bg-primary text-white @endif "   ><i class="fa fa-tasks mr-2" style="font-size: 20px;" aria-hidden="true"></i>مدیریت وظایف</a>
+                مدیریت عناوین شغلی</a>
     </li>
     <ul class="side a-collapse short ">
         <a class="ul-text  fnt-mxs"><i class="fas fa-tachometer-alt mr-1"></i> صفحه
