@@ -106,10 +106,12 @@ class UserController extends Controller
     // Generate a unique name for the image
     $imageName = uniqid() . '.' . $extension;
     // Move the image to the public directory
-    $image->move(storage_path('public/images'), $imageName);
+    $image->move(public_path('assets/images'), $imageName);
     // Return the image name
     return $imageName;
 }
+
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -142,7 +144,7 @@ class UserController extends Controller
             $user = User::findOrFail($id);
             //Handel image file and delete 
             if ($request->hasFile('image')) {
-                $this->handelUpdateImage($user,$request);   
+                              $validated['image']=self::handelUpdateImage($user,$request);   
             }
                          //Hash password
             if (!empty($validateData['password'])) {
@@ -173,9 +175,10 @@ class UserController extends Controller
  {
 //delete old image
 if(!empty($user->image) ){
-    $oldImagePath=storage_path('public/mages/'.$user->image);
+    $oldImagePath=public_path('assets/images/'.$user->image);
     if(File::exists($oldImagePath)){
-       unlink($oldImagePath);
+       File::delete($oldImagePath);
+     
     }
     }
     //update new image
@@ -184,9 +187,14 @@ if(!empty($user->image) ){
    $validateData=$request->validate([
     'image'=>'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
    ]);
-   $imageName=Date('YmdHis').'_'.$uploadFile->getClientOriginalName();
-   $uploadFile->storeAs('images',$imageName, 'public');
-   $user->update(['image'=>$imageName]);
+   // Get the file extension
+   $extension = $uploadFile->getClientOriginalExtension();
+   // Generate a unique name for the image
+   $imageName = uniqid() . '.' . $extension;
+    
+   //$uploadFile->storeAs('images',$imageName, 'public');
+   $uploadFile->move(public_path('assets/images'), $imageName);
+  
 }
     /**
      * Remove the specified resource from storage.
@@ -195,8 +203,8 @@ if(!empty($user->image) ){
     {
         $user = User::findOrFail($id);
         $imagePath = 'assets/images/' . $user->image;
-        if ($user->image && File::exists(public_path($imagePath))) {
-            File::delete(public_path($imagePath));
+               if ($user->image && File::exists( $imagePath)) {
+            File::delete( $imagePath);
         }
         $user->delete();
         return redirect('user/index')->with('success', 'One record deleted successfully');
