@@ -15,6 +15,7 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 
 use Illuminate\Support\Facades\Log;
+
 class UserController extends Controller
 {
 
@@ -56,14 +57,15 @@ class UserController extends Controller
     {
         try {
             $personData = $request->validated();
-            $imagePath = null;
+            $imagePath = $this->handleImage($request);
             //Handel Upload Image....
-            if ($request->hasFile('image')) {
-                $image =   $request->file('image');
-                $imageName = time() . '.' . $image->getClientOriginalExtension(); // Unique image name
-                $image->move(public_path('assets/images'), $imageName); // Save image to public/assets/images
-                $imagePath = 'assets/images/' . $imageName; // Relative path for database
-            }
+
+            // if ($request->hasFile('image')) {
+            //     $image =   $request->file('image');
+            //     $imageName = time() . '.' . $image->getClientOriginalExtension(); // Unique image name
+            //     $image->move(public_path('assets/images'), $imageName); // Save image to public/assets/images
+            //     $imagePath = 'assets/images/' . $imageName; // Relative path for database
+            // }
             $user = new User();
             $personData["image"] = $imagePath;
             $birthdate = DateHeplers::persianToEnglishDate($personData['birth_date']);
@@ -88,8 +90,26 @@ class UserController extends Controller
         }
     }
 
-
-
+    //create function to handel image
+    public function handleImage($request)
+    {
+       if(!$request->hasFile('image')){
+        return null;
+    }
+    $image = $request->file('image');
+    //Validate the image
+    $validated = $request->validate([
+        'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    ]);
+    // Get the file extension
+    $extension = $image->getClientOriginalExtension();
+    // Generate a unique name for the image
+    $imageName = uniqid() . '.' . $extension;
+    // Move the image to the public directory
+    $image->move(storage_path('public/images'), $imageName);
+    // Return the image name
+    return $imageName;
+}
     /**
      * Show the form for editing the specified resource.
      */
@@ -116,27 +136,15 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, string $id)
     {
-
-
-
         $validateData = $request->validated();
         try {
-            $user = User::find($id);
-            //Handel image file
+            //find user by Id
+            $user = User::findOrFail($id);
+            //Handel image file and delete 
             if ($request->hasFile('image')) {
-                //Delete old file
-                if ($user->image && File::exists(public_path('assets/images/' . $user->image))) {
-                    File::delete(public_path('assets/images/' . $user->image));
-                }
-                //Save new file image->getClientOriginalExtension();
-                $newImageName = time() . '.' . $request->file('image')->getClientOriginalExtension();
-                $request->file('image')->move(public_path('assets/images'), $newImageName);
-                $imagePath = 'assets/images/' . $newImageName;
-                $validateData['image'] =  $imagePath;
-            } else {
-                unset($validateData['image']);
+                $this->handelUpdateImage($user,$request);   
             }
-            //Hash password
+                         //Hash password
             if (!empty($validateData['password'])) {
                 $validateData['password'] = Hash::make($validateData['password']);
             } else {
@@ -153,10 +161,33 @@ class UserController extends Controller
 
             return redirect('/user/index')->with('success', 'Current record updated successfully');
         } catch (Exception $e) {
+            Log::error('Faild to update record' . $e->getMessage(),[
+                'trace'=> $e->getTrace(),
+                'file'=> $e->getFile(),
+            ]);
             return redirect()->back()->with('error', 'Unable to update current reocord' . $e->getMessage());
         }
     }
-
+    //for handel upa
+ private function handelUpdateImage(User $user, Request $request):void
+ {
+//delete old image
+if(!empty($user->image) ){
+    $oldImagePath=storage_path('public/mages/'.$user->image);
+    if(File::exists($oldImagePath)){
+       unlink($oldImagePath);
+    }
+    }
+    //update new image
+   $uploadFile= $request->file('image');
+   //validate image
+   $validateData=$request->validate([
+    'image'=>'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+   ]);
+   $imageName=Date('YmdHis').'_'.$uploadFile->getClientOriginalName();
+   $uploadFile->storeAs('images',$imageName, 'public');
+   $user->update(['image'=>$imageName]);
+}
     /**
      * Remove the specified resource from storage.
      */

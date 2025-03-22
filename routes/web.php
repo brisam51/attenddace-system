@@ -3,10 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\ProjectUserController;
+use App\Http\Controllers\JobDetailsController;
 use App\Http\Controllers\Admin\AddressController;
 use App\Http\Controllers\Admin\BankInfoController;
-use App\Http\Controllers\JobDetailsController;
+use App\Http\Controllers\ProjectJobUserController;
 
 Route::get('/', function () {
     return view('admin.user.dashboard');
@@ -46,10 +46,10 @@ Route::get("projects/edit/{id}", [ProjectController::class, 'edit'])->name('proj
 Route::post("projects/update/{id}", [ProjectController::class, 'update'])->name('projects.update');
 Route::get("projects/delete/{id}", [ProjectController::class, 'destroy'])->name('projects.delete');
 
-//Project User
-Route::get("project-user/{id}/members", [ProjectUserController::class, 'fetchDataByProject_Id'])->name('projects.members');
-Route::get("project-user/create/{id}", [ProjectUserController::class, 'createMember'])->name('project-member.create');
-Route::post("project-user/store", [ProjectUserController::class, 'store'])->name('project-member.store');
-Route::get("project-user/edit/{id}", [ProjectUserController::class, 'edit'])->name('project-user.edit');
-Route::post("project-user/update/{id}", [ProjectUserController::class, 'update'])->name('project-user.update');
-Route::get("project-user/delete/{id}", [ProjectUserController::class, 'destroy'])->name('project-user.delete');
+//Project Job User
+Route::get("project/member/index/{projectId}", [ProjectJobUserController::class, 'fetchMemberByProjectId'])->name('projects.members');
+Route::get("project/member/create/{projectId}", [ProjectJobUserController::class, 'addMemberView'])->name('project-member.create');
+Route::post("project/member/store", [ProjectJobUserController::class, 'addMember'])->name('project-member.store');
+Route::get("project/member/edit/{id}", [ProjectJobUserController::class, 'editMember'])->name('project-member.edit');
+Route::post("project/member/update/{id}", [ProjectJobUserController::class, 'updateMember'])->name('project-member.update');
+Route::get("project/member/delete/{id}", [ProjectJobUserController::class, 'deleteMember'])->name('project-member.delete');

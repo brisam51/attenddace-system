@@ -60,17 +60,28 @@ class User extends Authenticatable
     {
         return $this->hasMany(Address::class);
     }
-    public function bankInfo(){
+    public function bankInfo()
+    {
         return $this->hasMany(BankInfo::class);
     }
 
-        public function  documents(){
-    return $this->hasMany(Document::class);
-    }
-
-    public function projects(){
-        return  $this->belongsToMany(Project::class,'project_user');
+    public function  documents()
+    {
+        return $this->hasMany(Document::class);
     }
     //===================End Relationships===============
+    //==========Start relationship with pivot table project_job_user============
 
+    //Defin relationship with project via pivot ProjectJobUser
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class, 'project_job_user', 'user_id', 'project_id')
+            ->withPivot('job_detail_id', 'file_contract');
+    }
+    //Defin relationship with job_detail via pivot ProjectJobUser
+    public function jobDetail()
+    {
+        return $this->belongsToMany(JobDetails::class, 'project_job_user', 'user_id', 'job_detail_id')
+            ->withPivot('project_id', 'file_contract');
+    }
 }

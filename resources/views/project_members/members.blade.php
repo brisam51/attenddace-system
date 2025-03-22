@@ -38,15 +38,42 @@
                             <th scope="col">نام</th>
                             <th scope="col">نام خانوادگی</th>
                             <th scope="col">کد ملی</th>
-                            <th scope="col">شماره پرسنلی </th>
+                            <th scope="col">سمت شغلی  </th>
+                            <th scope="col">قرارداد</th> </th>
                             <th scope="col">عملیات</th>
 
                         </tr>
                     </thead>
                     <tbody>
-                       <tr>
-                        <td>#</td>
-                       </tr>
+                        <tr>
+                            @foreach ($members as  $member )
+                      <td>{{ $loop->iteration }}</td>
+                      <td><img src="{{ url('/' . $member['image']) }}" class="user-image" alt="No Image"></td>
+                      <td>{{ $member->firstName }}</td>
+                      <td>{{ $member->lastName }}</td>  
+                      <td>{{ $member->nationalCode }}
+                      <td>{{ $member->jobTitle }}</td>  
+                      <td>{{$member->id}}</td>  
+                     
+                       <td>
+                        <div class="d-flex gap-2">
+                            <a href="{{ url('/project/member/edit/' .$member['id']) }}" class="btn btn-primary">ویرایش</a>
+                            <a href="{{ url('/project/member/delete/'.$member['id']) }}" class="btn btn-danger">حذف</a>
+                        </div>
+                                              
+                       </td>
+                     
+                      </tr>
+                      </td>
+                    
+                          
+                            
+                          
+                              
+                            @endforeach
+                        </tr>
+                       
+                      
                     </tbody>
                 </table>
 
