@@ -67,9 +67,9 @@
                                 <td>{{ $value->description }}</td>
                                 <td>
                                     @if ($value->status == '0')
-                                        درحال انجام
+                                        <span class="badge badge-success">در حال انجام</span>
                                     @else
-                                        پایان یافته
+                                        <span class="badge badge-danger">پایان یافته</span>
                                     @endif
                                 </td>
 
@@ -82,8 +82,13 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <a href="{{ route('projects.members', $value->id) }}" class="btn btn-primary">اعضای
-                                        پروژه</a>
+                                    @if ($value->status == '0')
+                                        <a href="{{ route('projects.members', $value->id) }}" class="btn btn-primary">اعضای
+                                            پروژه</a>
+                                    @else
+                                        <span class="badge badge-danger" styl="font-size: 12px;">امکان افزودن عضو وجود
+                                            ندارد</span>
+                                    @endif
                                 </td>
 
                             </tr>

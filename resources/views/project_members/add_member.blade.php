@@ -51,13 +51,13 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1"> عنوان شغلی </label>
-                            <select name="job_detail_id" id="job_id" class="form-control">
+                            <select name="task_id" id="task_id" class="form-control">
                                 <option value=""> انتخاب شغل</option>
-                                @foreach ($jobs as $value )
-                                    <option value="{{ $value->id }}">{{ $value->job_title  }}</option>
+                                @foreach ($tasks as $value )
+                                    <option value="{{ $value->id }}">{{ $value->title  }}</option>
                                 @endforeach
                                                            </select>
-                            @error('job_detail_id')
+                            @error('task_id')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>

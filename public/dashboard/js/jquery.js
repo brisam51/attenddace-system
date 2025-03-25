@@ -4699,7 +4699,7 @@ if ( !support.option ) {
 function getAll( context, tag ) {
 
 	// Support: IE <=9 - 11 only
-	// Use typeof to avoid zero-argument method invocation on host objects (trac-15151)
+	// Use typeof to avoid zero-argument method intask on host objects (trac-15151)
 	var ret;
 
 	if ( typeof context.getElementsByTagName !== "undefined" ) {
@@ -6198,7 +6198,7 @@ jQuery.fn.extend( {
 				}
 			}
 
-		// Force callback invocation
+		// Force callback intask
 		}, ignored );
 	}
 } );
@@ -9536,7 +9536,7 @@ jQuery.extend( {
 			var isSuccess, success, error, response, modified,
 				statusText = nativeStatusText;
 
-			// Ignore repeat invocations
+			// Ignore repeat intasks
 			if ( completed ) {
 				return;
 			}

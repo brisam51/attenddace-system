@@ -3,10 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\JobDetailsController;
+use App\Http\Controllers\taskController;
 use App\Http\Controllers\Admin\AddressController;
 use App\Http\Controllers\Admin\BankInfoController;
-use App\Http\Controllers\ProjectJobUserController;
+use App\Http\Controllers\ProjecttaskUserController;
 
 Route::get('/', function () {
     return view('admin.user.dashboard');
@@ -30,13 +30,13 @@ Route::put('user/address/update/{id}', [AddressController::class, 'update'])->na
 Route::get('user/bank/index/{id}', [BankInfoController::class, 'fetchDataById'])->name('get.user.bank');
 Route::post('user/bank/store', [BankInfoController::class, 'store']);
 Route::put('user/bank/update/{id}', [BankInfoController::class, 'update'])->name('update.user.bank');
-//Job Details
-Route::get('jobs/index', [JobDetailsController::class, 'index'])->name('all.jobs');
-Route::get('jobs/create', [JobDetailsController::class, 'create'])->name('create.job');
-Route::post('jobs/store', [JobDetailsController::class, 'store'])->name('store.job');
-Route::get('jobs/edit/{id}', [JobDetailsController::class, 'edit'])->name('edit.job');
-Route::post('jobs/update/{id}', [JobDetailsController::class, 'update'])->name('update.job');
-Route::get('jobs/delete/{id}', [JobDetailsController::class, 'destroy'])->name('delete.job');
+//task Details
+Route::get('tasks/index', [taskController::class, 'index'])->name('all.tasks');
+Route::get('tasks/create', [taskController::class, 'create'])->name('create.task');
+Route::post('tasks/store', [taskController::class, 'store'])->name('store.task');
+Route::get('tasks/edit/{id}', [taskController::class, 'edit'])->name('edit.task');
+Route::post('tasks/update/{id}', [taskController::class, 'update'])->name('update.task');
+Route::get('tasks/delete/{id}', [taskController::class, 'destroy'])->name('delete.task');
 
 //Project
 Route::get("projects/index", [ProjectController::class, 'index'])->name('projects.index');
@@ -46,10 +46,10 @@ Route::get("projects/edit/{id}", [ProjectController::class, 'edit'])->name('proj
 Route::post("projects/update/{id}", [ProjectController::class, 'update'])->name('projects.update');
 Route::get("projects/delete/{id}", [ProjectController::class, 'destroy'])->name('projects.delete');
 
-//Project Job User
-Route::get("project/member/index/{projectId}", [ProjectJobUserController::class, 'fetchMemberByProjectId'])->name('projects.members');
-Route::get("project/member/create/{projectId}", [ProjectJobUserController::class, 'addMemberView'])->name('project-member.create');
-Route::post("project/member/store", [ProjectJobUserController::class, 'addMember'])->name('project-member.store');
-Route::get("project/member/edit/{id}", [ProjectJobUserController::class, 'editMember'])->name('project-member.edit');
-Route::post("project/member/update/{id}", [ProjectJobUserController::class, 'updateMember'])->name('project-member.update');
-Route::get("project/member/delete/{id}", [ProjectJobUserController::class, 'deleteMember'])->name('project-member.delete');
+//Project task User
+Route::get("project/member/index/{projectId}", [ProjecttaskUserController::class, 'fetchMemberByProjectId'])->name('projects.members');
+Route::get("project/member/create/{projectId}", [ProjecttaskUserController::class, 'addMemberView'])->name('project-member.create');
+Route::post("project/member/store", [ProjecttaskUserController::class, 'addMember'])->name('project-member.store');
+Route::get("project/member/edit/{id}", [ProjecttaskUserController::class, 'editMember'])->name('project-member.edit');
+Route::post("project/member/update/{id}", [ProjecttaskUserController::class, 'updateMember'])->name('project-member.update');
+Route::get("project/member/delete/{id}", [ProjecttaskUserController::class, 'deleteMember'])->name('project-member.delete');

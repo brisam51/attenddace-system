@@ -11,22 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('projects', function (Blueprint $table) {
+        Schema::create('tasks', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('description');
-            $table->date('start_date');
-            $table->date('end_date');
-            $table->string('status');
-            $table->timestamps();
+            $table->string('task_code')->unique();
+            $table->float('hourly_wage');
+            $table->text('description');
+                       $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('projects');
+        Schema::dropIfExists('tasks');
     }
 };

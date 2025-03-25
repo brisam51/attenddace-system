@@ -37,7 +37,7 @@ return [
         'database' => [
             'driver' => 'database',
             'connection' => env('DB_QUEUE_CONNECTION'),
-            'table' => env('DB_QUEUE_TABLE', 'jobs'),
+            'table' => env('DB_QUEUE_TABLE', 'tasks'),
             'queue' => env('DB_QUEUE', 'default'),
             'retry_after' => (int) env('DB_QUEUE_RETRY_AFTER', 90),
             'after_commit' => false,
@@ -76,10 +76,10 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Job Batching
+    | task Batching
     |--------------------------------------------------------------------------
     |
-    | The following options configure the database and table that store job
+    | The following options configure the database and table that store task
     | batching information. These options can be updated to any database
     | connection and table which has been defined by your application.
     |
@@ -87,17 +87,17 @@ return [
 
     'batching' => [
         'database' => env('DB_CONNECTION', 'sqlite'),
-        'table' => 'job_batches',
+        'table' => 'task_batches',
     ],
 
     /*
     |--------------------------------------------------------------------------
-    | Failed Queue Jobs
+    | Failed Queue tasks
     |--------------------------------------------------------------------------
     |
-    | These options configure the behavior of failed queue job logging so you
-    | can control how and where failed jobs are stored. Laravel ships with
-    | support for storing failed jobs in a simple file or in a database.
+    | These options configure the behavior of failed queue task logging so you
+    | can control how and where failed tasks are stored. Laravel ships with
+    | support for storing failed tasks in a simple file or in a database.
     |
     | Supported drivers: "database-uuids", "dynamodb", "file", "null"
     |
@@ -106,7 +106,7 @@ return [
     'failed' => [
         'driver' => env('QUEUE_FAILED_DRIVER', 'database-uuids'),
         'database' => env('DB_CONNECTION', 'sqlite'),
-        'table' => 'failed_jobs',
+        'table' => 'failed_tasks',
     ],
 
 ];

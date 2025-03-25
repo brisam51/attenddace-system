@@ -122,7 +122,7 @@
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
-                            <img src="{{ asset('/' . $user->image) }}" class="user-image" alt="no image">
+                            <img src="{{ asset('assets/images/' . $user->image) }}" class="user-image" alt="no image">
                             <img src="#"  class="user-image image-preview" alt="">
                         </div>
 

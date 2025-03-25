@@ -51,7 +51,7 @@
                         @foreach ($users as $user)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td><img src="{{ url('/' . $user->image) }}" class="user-image" alt="No Image"></td>
+                                <td><img src="{{ asset('assets/images/' . $user->image) }}" class="user-image" alt="No Image"></td>
                                 <td class="user-first-name">{{ $user->first_name }}</td>
                                 <td class="user-last-name">{{ $user->last_name }}</td>
                                 <td class="national-id">{{ $user->national_id }}</td>
@@ -63,8 +63,23 @@
                                         echo $jalaliDate->format('Y/m/d');
                                     @endphp
                                 </td>
-                                <td>{{ $user->role }}</td>
-                                <td>{{ $user->work_status }}</td>
+                                <td>
+                                    @if ($user->role == 'admin')
+                                        مدیرپروژه
+                                    @elseif ($user->role == 'user')
+                                        کاربر
+                                        @elseif ($user->role == 'supperadmin')
+                                        مدیر ارشد
+                                    @endif
+                                </td>
+                                <td>
+                                    @if ($user->work_status == 'active')
+                                        <span class="badge badge-success">فعال</span>
+                                    @elseif ($user->work_status == 'inactive')
+                                        <span class="badge badge-danger">غیرفعال
+                                        
+                                    @endif
+                                </td>
                                 <td>{{ $user->email }}</td>
                                 <td>
                                     <div class="col">
@@ -78,11 +93,11 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="circle-container">
-                                       <a href="#" data-id="{{$user->id }}"  class="user-address"><div class="circle-quarter quarter-1">اطلاعات تماس</div></a>
-                                       <a href="#" data-id="{{$user->id }}"  class="bank_info_link"><div class="circle-quarter quarter-2" style="text-align: left" >اطلاعات بانکی</div></a>
-                                       <a href="#" data-id="{{$user->id }}"  class="job-link"><div class="circle-quarter quarter-3">اطلاعات شغلی</div></a>
-                                       <a href="#" data-id="{{$user->id }}"  class=""><div class="circle-quarter quarter-4" style="text-align: left">مستندات</div></a>
+                                    <div class="">
+                                       <a href="#" data-id="{{$user->id }}"  class="user-address"><i class="fa fa-phone mr-2" aria-hidden="true" style="font-size: 20px;"></i>اطلاعات تماس</a>
+                                       <a href="#" data-id="{{$user->id }}"  class="bank_info_link"><i class="fa fa-credit-card mr-2" aria-hidden="true" style="font-size: 20px;"></i>اطلاعات بانکی</a>
+                                       <a href="#" data-id="{{$user->id }}"  class="task-link"> <i class="fa fa-home mr-2" aria-hidden="true" style="font-size: 20px;"> </i>اطلاعات شغلی</a>
+                                       <a href="#" data-id="{{$user->id }}"  class=""><i class="fa fa-file mr-2" aria-hidden="true" style="font-size: 20px;"></i>مستندات</a>
 
                                        
                                     </div>
@@ -202,22 +217,22 @@
 
 
     {{-- End bank info modal --}}
-    {{-- -------------------------------- Start Job Details Modal --}}
-    <div id="jobDetails-modal" class="modal " tabindex="-1">
+    {{-- -------------------------------- Start task Details Modal --}}
+    <div id="task-modal" class="modal " tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="row">
-                        <img id="user-job-image" src="" class="user-image" alt="User Image">
-                        <div id="user-job-info" class="modal-title"></div>
+                        <img id="user-task-image" src="" class="user-image" alt="User Image">
+                        <div id="user-task-info" class="modal-title"></div>
                     </div>
                 </div>
                 <div class="modal-body">
-                    {{-- Start job details form --}}
-                    <form id="job-details-form">
+                    {{-- Start task details form --}}
+                    <form id="task-details-form">
                         <div class="form-group">
-                            <input type="text" hidden class="form-control" name="job-id" id="job-id">
-                            <span id="job-details-id_error" class="error-message text-danger"></span>
+                            <input type="text" hidden class="form-control" name="task-id" id="task-id">
+                            <span id="task-details-id_error" class="error-message text-danger"></span>
                         </div>
                         <div class="form-group">
                             <input type="text" hidden class="form-control" name="user_id" id="user_id">
@@ -226,33 +241,33 @@
 
                         <div class="form-group">
                             <label for="">عنوان شغلی: </label>
-                            <input type="text" class="form-control" id="job_title" name="">
-                            <span id="job_title_error" class="error-message"></span>
+                            <input type="text" class="form-control" id="task_title" name="">
+                            <span id="task_title_error" class="error-message"></span>
                         </div>
                         <div class="form-group">
                             <label for=""> شرح شغل</label>
-                            <input type="text" class="form-control" id="job_description" name="">
-                            <span id="job_description_error" class="error-message"></span>
+                            <input type="text" class="form-control" id="task_description" name="">
+                            <span id="task_description_error" class="error-message"></span>
                         </div>
                         <div class="form-group">
                             <label for="">شماره بیمه</label>
-                            <input type="text" class="form-control persian-number" id="job_insurance_code" name="">
-                            <span id="job_insurance_code_error" class="error-message"></span>
+                            <input type="text" class="form-control persian-number" id="task_insurance_code" name="">
+                            <span id="task_insurance_code_error" class="error-message"></span>
                         </div>
                         <div class="form-group">
                             <label for="" id=""> تاریخ استخدام:</label>
                             <input type="text" class="form-control" id="date_employment" name="" style="font-family: 'yekan' ">
                             <input type="hidden" class="form-control" id="gregorianDate" name="">
-                            <span id="job_insurance_code_error" class="error-message"></span>
+                            <span id="task_insurance_code_error" class="error-message"></span>
                         </div>
-                        <button id="save-job-button" type="submit" class="btn btn-primary">ذخیره</button>
+                        <button id="save-task-button" type="submit" class="btn btn-primary">ذخیره</button>
 
                     </form>
                     {{-- End address form --}}
 
                 </div>
                 <div class="modal-footer">
-                    <button id="close-job-amodal" type="button" class="btn btn-secondary"
+                    <button id="close-task-amodal" type="button" class="btn btn-secondary"
                         data-bs-dismiss="modal">بستن</button>
 
 
@@ -261,7 +276,7 @@
         </div>
     </div>
 
-    {{-- --------------------------------- Start Job Details Modal --}}
+    {{-- --------------------------------- Start task Details Modal --}}
 @endsection
 @section('scripts')
 @endsection

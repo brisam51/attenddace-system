@@ -8,15 +8,15 @@ class Project extends Model
 {
 
     protected $fillable = ["title", "description", "start_date", "end_date", "status"];
-    //Define relationship to User model via ProjectJobUser model
+    //Define relationship to User model via ProjecttaskUser model
     public function users()
     {
-        return $this->belongsToMany(User::class, 'project_job_user', 'project_id', 'user_id')
-            ->withPivot('job_detail_id', 'file_contract');
+        return $this->belongsToMany(User::class, 'project_task_user', 'project_id', 'user_id')
+            ->withPivot('task_id', 'file_contract');
     }
-    //Define relationship to JobDetail model via ProjectJobUser model
-    public function jobDetail(){
-        return $this->belongsToMany(JobDetails::class,'project_job_user','project_id','job_detail_id')
+    //Define relationship to taskDetail model via ProjecttaskUser model
+    public function taskDetail(){
+        return $this->belongsToMany(task::class,'project_task_user','project_id','task_id')
         ->withPivot('user_id','file_contract');
     }
 }

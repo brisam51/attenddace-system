@@ -49,7 +49,7 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1"> عنوان شغلی </label>
-                            <input type="text" name="#"  readonly value="{{ $member['jobTitle'] }}" class="form-control">
+                            <input type="text" name="#"  readonly value="{{ $member['taskTitle'] }}" class="form-control">
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1"> تصویر قرارداد</label>

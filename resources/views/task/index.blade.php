@@ -20,7 +20,7 @@
             @endif
             <div class="row">
                 <div class="col" style="margin:10px;">
-                    <a href="{{ route('create.job') }}" class="btn btn-primary"
+                    <a href="{{ route('create.task') }}" class="btn btn-primary"
                         style="display:block; width:80px;"> جدید</a>
                 </div>
                 <div class="col user-header">
@@ -44,18 +44,18 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($jobs as $job )
+                        @foreach ($tasks as $task )
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $job['job_title']}}</td>
-                            <td class="job_code">{{ $job['job_code'] }}</td>
-                            <td class=job-hourly-wages  >{{ $job['hourly_wages'] }} ریال</td>
-                            <td>{{ $job['job_description'] }}</td>
+                            <td>{{ $task['title']}}</td>
+                            <td class="task_code">{{ $task['task_code'] }}</td>
+                            <td class=task-hourly-wages  >{{ $task['hourly_wage'] }} ریال</td>
+                            <td>{{ $task['description'] }}</td>
                             <td>
                                 <div class="gap-2 d-flex">
-                                    <a href="{{ route('edit.job', $job->id) }}" class="btn btn-primary"
+                                    <a href="{{ route('edit.task', $task->id) }}" class="btn btn-primary"
                                         <i class="fa fa-edit"></i> ویرایش</a>
-                                        <a href="{{ route('delete.job', $job->id) }}" class="btn btn-danger"
+                                        <a href="{{ route('delete.task', $task->id) }}" class="btn btn-danger"
                                             <i class="fa fa-edit"></i> حذف</a>
                                 </div>
                                 

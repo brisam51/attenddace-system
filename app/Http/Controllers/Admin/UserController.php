@@ -6,22 +6,23 @@ use Exception;
 use Carbon\Carbon;
 use App\Models\User;
 use App\helpers\DateHeplers;
+use App\helpers\handleImage;
 use Illuminate\Http\Request;
 use Morilog\Jalali\Jalalian;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
-
-use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
 
     public function dashboard()
     {
-        return view(('admin.dashboard'));
+        return view(('admin.user.dashboard'));
     }
     /**
      * Display a listing of the resource.
@@ -58,14 +59,7 @@ class UserController extends Controller
         try {
             $personData = $request->validated();
             $imagePath = $this->handleImage($request);
-            //Handel Upload Image....
-
-            // if ($request->hasFile('image')) {
-            //     $image =   $request->file('image');
-            //     $imageName = time() . '.' . $image->getClientOriginalExtension(); // Unique image name
-            //     $image->move(public_path('assets/images'), $imageName); // Save image to public/assets/images
-            //     $imagePath = 'assets/images/' . $imageName; // Relative path for database
-            // }
+          
             $user = new User();
             $personData["image"] = $imagePath;
             $birthdate = DateHeplers::persianToEnglishDate($personData['birth_date']);
@@ -93,23 +87,23 @@ class UserController extends Controller
     //create function to handel image
     public function handleImage($request)
     {
-       if(!$request->hasFile('image')){
-        return null;
+        if (!$request->hasFile('image')) {
+            return null;
+        }
+        $image = $request->file('image');
+        //Validate the image
+        $validated = $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+        // Get the file extension
+        $extension = $image->getClientOriginalExtension();
+        // Generate a unique name for the image
+        $imageName = uniqid() . '.' . $extension;
+        // Move the image to the public directory
+        $image->move(public_path('assets/images'), $imageName);
+        // Return the image name
+        return $imageName;
     }
-    $image = $request->file('image');
-    //Validate the image
-    $validated = $request->validate([
-        'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-    ]);
-    // Get the file extension
-    $extension = $image->getClientOriginalExtension();
-    // Generate a unique name for the image
-    $imageName = uniqid() . '.' . $extension;
-    // Move the image to the public directory
-    $image->move(public_path('assets/images'), $imageName);
-    // Return the image name
-    return $imageName;
-}
 
 
     /**
@@ -142,11 +136,23 @@ class UserController extends Controller
         try {
             //find user by Id
             $user = User::findOrFail($id);
-            //Handel image file and delete 
-            if ($request->hasFile('image')) {
-                              $validated['image']=self::handelUpdateImage($user,$request);   
-            }
-                         //Hash password
+
+            //Handel image file and delete old image 
+           if($request->hasFile('image')) {
+            $validated= $request->validated(['image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048 ']);
+                $image = $request->file('image');
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('assets/images'), $imageName);
+                if(!empty($user->image)){
+                    unlink(public_path('assets/images/'.$user->image));
+                }
+                $validateData['image'] = $imageName;
+                }
+
+         
+          
+
+            //Hash password
             if (!empty($validateData['password'])) {
                 $validateData['password'] = Hash::make($validateData['password']);
             } else {
@@ -163,48 +169,24 @@ class UserController extends Controller
 
             return redirect('/user/index')->with('success', 'Current record updated successfully');
         } catch (Exception $e) {
-            Log::error('Faild to update record' . $e->getMessage(),[
-                'trace'=> $e->getTrace(),
-                'file'=> $e->getFile(),
+            Log::error('Faild to update record' . $e->getMessage(), [
+                'trace' => $e->getTrace(),
+                'file' => $e->getFile(),
             ]);
             return redirect()->back()->with('error', 'Unable to update current reocord' . $e->getMessage());
         }
     }
     //for handel upa
- private function handelUpdateImage(User $user, Request $request):void
- {
-//delete old image
-if(!empty($user->image) ){
-    $oldImagePath=public_path('assets/images/'.$user->image);
-    if(File::exists($oldImagePath)){
-       File::delete($oldImagePath);
-     
-    }
-    }
-    //update new image
-   $uploadFile= $request->file('image');
-   //validate image
-   $validateData=$request->validate([
-    'image'=>'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
-   ]);
-   // Get the file extension
-   $extension = $uploadFile->getClientOriginalExtension();
-   // Generate a unique name for the image
-   $imageName = uniqid() . '.' . $extension;
-    
-   //$uploadFile->storeAs('images',$imageName, 'public');
-   $uploadFile->move(public_path('assets/images'), $imageName);
-  
-}
+
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
         $user = User::findOrFail($id);
-        $imagePath = 'assets/images/' . $user->image;
-               if ($user->image && File::exists( $imagePath)) {
-            File::delete( $imagePath);
+        $imagePath = public_path('assets/images/' . $user->image);
+        if (File::exists($imagePath)) {
+            File::delete($imagePath);
         }
         $user->delete();
         return redirect('user/index')->with('success', 'One record deleted successfully');

@@ -1,16 +1,16 @@
 $(function () {
     var csrfToken = $('meta[name="csrf-token"]').attr('content');
-    $(".job-link").on("click", function (e) {
+    $(".task-link").on("click", function (e) {
         e.preventDefault();
-        var form = $("#job-details-form");
+        var form = $("#task-details-form");
         var userId = $(this).data("id");
         var userImage = $(this).closest("tr").find(".user-image").attr("src");
 
         //upload user image to top of modal
-        $("#user-job-image").attr("src", userImage);
+        $("#user-task-image").attr("src", userImage);
         var firstName = $(this).closest("tr").find(".user-first-name").text();
         var lastName = $(this).closest("tr").find(".user-last-name").text();
-        $("#user-job-info").text(firstName + " " + lastName);
+        $("#user-task-info").text(firstName + " " + lastName);
 
         $("#date_employment").persianDatepicker({
             format: "YYYY/MM/DD",
@@ -26,30 +26,30 @@ $(function () {
         });
 
         //clear Textfields
-        $("#job_title").val(''); //set job title
-        $("#job_description").val(''); //set job description
-        $("#job_insurance_code").val('');
+        $("#task_title").val(''); //set task title
+        $("#task_description").val(''); //set task description
+        $("#task_insurance_code").val('');
         $("#date_employment").val('');
-        //get job details
+        //get task details
         $.ajax({
-            url: "/user/job/index/" + userId,
+            url: "/user/task/index/" + userId,
             method: "GET",
             success: function (response) {
                 if (response.status == "success") {
-                    $("#job-id").val(response.data.id)
-                    $("#job_title").val(response.data.job_title); //set job title
-                    $("#job_description").val(response.data.job_description); //set job description
-                    $("#job_insurance_code").val(response.data.job_insurance_code);
+                    $("#task-id").val(response.data.id)
+                    $("#task_title").val(response.data.task_title); //set task title
+                    $("#task_description").val(response.data.task_description); //set task description
+                    $("#task_insurance_code").val(response.data.task_insurance_code);
                     $("#date_employment").val(response.data.date_employment);
                     //update current  record
                     form.on("submit", function (e) {
                         e.preventDefault();
 
                         var updateData = {
-                            id: $("#job-id").val(),
-                            job_title: $("#job_title").val(),
-                            job_description: $("#job_description").val(),
-                            job_insurance_code: $("#job_insurance_code").val(),
+                            id: $("#task-id").val(),
+                            task_title: $("#task_title").val(),
+                            task_description: $("#task_description").val(),
+                            task_insurance_code: $("#task_insurance_code").val(),
                             date_employment: $("#date_employment").val(),
                             user_id: userId,
 
@@ -57,7 +57,7 @@ $(function () {
                         //Update Current record.*
 
                         $.ajax({
-                            url: "/user/job/update/" + userId,
+                            url: "/user/task/update/" + userId,
                             method: "PUT",
                             data: updateData,
                             headers: {
@@ -65,10 +65,10 @@ $(function () {
                             },
                             success: function (response) {
                                 if (response.status == "success") {
-                                    alert("Job updated successfully");
-                                    $("#jobDetails-modal").hide();
+                                    alert("task updated successfully");
+                                    $("#task-modal").hide();
                                 } else {
-                                    alert("Job updated Fails");
+                                    alert("task updated Fails");
                                 }
                             },
                             error: function (xhr) {
@@ -81,14 +81,14 @@ $(function () {
                 } else {
                     form.on("submit", function () {
                         var insertData = {
-                            job_title: $("#job_title").val(),
-                            job_description: $("#job_description").val(),
-                            job_insurance_code: $("#job_insurance_code").val(),
+                            task_title: $("#task_title").val(),
+                            task_description: $("#task_description").val(),
+                            task_insurance_code: $("#task_insurance_code").val(),
                             date_employment: $("#date_employment").val(),
                             user_id: userId,
                         };
                         $.ajax({
-                            url: "/user/job/create",
+                            url: "/user/task/create",
                             method: "POST",
                             data: insertData,
                             headers: {
@@ -96,10 +96,10 @@ $(function () {
                             },
                             success: function (response) {
                                 if (response.status == "success") {
-                                    alert("Job created successfully");
-                                    $("#jobDetails-modal").hide();
+                                    alert("task created successfully");
+                                    $("#task-modal").hide();
                                 } else {
-                                    alert("Failed to create job");
+                                    alert("Failed to create task");
                                 }
                             },
                             error: function (xhr) {
@@ -130,9 +130,9 @@ $(function () {
         });
 
 
-        $("#jobDetails-modal").show();
+        $("#task-modal").show();
     });
-    $("#close-job-amodal").on("click", function () {
-        $("#jobDetails-modal").hide();
+    $("#close-task-amodal").on("click", function () {
+        $("#task-modal").hide();
     });
 });
