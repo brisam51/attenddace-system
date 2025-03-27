@@ -72,16 +72,21 @@ class User extends Authenticatable
     //===================End Relationships===============
     //==========Start relationship with pivot table project_task_user============
 
-    //Defin relationship with project via pivot ProjecttaskUser
+    //Defin relationship with project via pivot ProjectTaskUser
     public function projects()
     {
         return $this->belongsToMany(Project::class, 'project_task_user', 'user_id', 'project_id')
             ->withPivot('task_id', 'file_contract');
     }
-    //Defin relationship with task via pivot ProjecttaskUser
+    //Defin relationship with task via pivot ProjectTaskUser
     public function tasks()
     {
         return $this->belongsToMany(task::class, 'project_task_user', 'user_id', 'task_id')
             ->withPivot('project_id', 'file_contract');
     }
+    //attendance  releationship
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class);
+    }   
 }

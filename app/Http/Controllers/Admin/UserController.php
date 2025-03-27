@@ -148,10 +148,7 @@ class UserController extends Controller
                 }
                 $validateData['image'] = $imageName;
                 }
-
-         
-          
-
+              
             //Hash password
             if (!empty($validateData['password'])) {
                 $validateData['password'] = Hash::make($validateData['password']);

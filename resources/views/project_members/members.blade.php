@@ -17,14 +17,15 @@
             @if (session('success'))
                 <div class="alert alert-success">{{ session('success') }}</div>
             @endif
-            <div class="row">
-                <div class="col" style="margin:10px;">
-                    <a href="{{ route('project-member.create', $project_id) }}" class="btn btn-primary"
-                        style="display:block; width:80px;"> جدید</a>
-                </div>
-                <div class="col user-header">
-                    <h3>لیست اعضای پروژه</h3>
-                </div>
+            
+            <div  class="d-flex justify-content-between align-items-center" style="margin: 10px;">
+                          
+                    <a href="{{ route('project-member.create', $project_id) }}" class="btn btn-primary" style="width: 80px;">جدید</a>
+                
+                       
+               
+                    <h3 class="text-center flex-grow-1">لیست اعضای پروژه {{ $projectTitle }}</h3>
+               
             </div>
         </div>
         <div class="card-body">
@@ -52,7 +53,14 @@
                                 <td>{{ $member->lastName }}</td>
                                 <td>{{ $member->nationalCode }}
                                 <td>{{ $member->taskTitle }}</td>
-                                <td>{{ $member->id }}</td>
+                                <td>
+                                    @if (!empty($member->file_contract))
+                                        <a href="{{ asset('assets/images/' . $member->file_contract) }}"
+                                            target="_blank">نمایش فایل</a>
+                                    @else
+                                        <span class="badge text-bg-danger">قرار داد ندارد</span> </span>
+                                    @endif
+                                </td>
                                 <td>
                                     <div class="d-flex gap-2">
                                         <a href="{{ url('/project/member/edit/' . $member['id']) }}"

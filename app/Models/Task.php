@@ -11,14 +11,14 @@ class task extends Model
     'hourly_wage','task_code','title','description'
    ];
 
-//Define realtionship to User model via ProjecttaskUser
+//Define realtionship to User model via ProjectTaskUser
 public function users(){
     return $this->belongsToMany(User::class,'Project_task_user','task_id','user_id')
 
     ->withPivot('project_id','file_contract');
 }
 
-//Define relationship to Project model via ProjecttaskUser
+//Define relationship to Project model via ProjectTaskUser
 public function projects(){
     return $this->belongsToMany(Project::class,'Project_task_user','task_id','project_id')
     ->withPivot('user_id','file_contract');

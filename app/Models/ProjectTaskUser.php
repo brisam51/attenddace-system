@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ProjecttaskUser extends Model
+class ProjectTaskUser extends Model
 {
     protected $table = 'project_task_user';
 
@@ -36,18 +36,19 @@ class ProjecttaskUser extends Model
 
 }
 public static function  projectMemebers($project_id){
-    $project_members=ProjecttaskUser::select('project_task_user.*','users.national_id as nationalCode','users.image as image','users.first_name as firstName','users.last_name as lastName',
-    'tasks.title as taskTitle','project_task_user.file_contract as fileContract')
+    $project_members=ProjectTaskUser::select('project_task_user.*','users.national_id as nationalCode','users.image as image','users.first_name as firstName','users.last_name as lastName',
+    'tasks.title as taskTitle','project_task_user.file_contract as fileContract', 'projects.title as projectTitle')
     ->join('users','users.id','=','project_task_user.user_id')
     ->join('tasks','tasks.id','=','project_task_user.task_id')
+    ->join('projects','projects.id','=','project_task_user.project_id')
     ->where('project_task_user.project_id','=',$project_id)
    
     ->get();
     return $project_members;
 }
 public static function  finSingleMemeber($id){
-    $singleMember=ProjecttaskUser::select('project_task_user.*','users.national_id as nationalCode','users.image as image','users.first_name as firstName','users.last_name as lastName',
-    'tasks.title as taskTitle')
+    $singleMember=ProjectTaskUser::select('project_task_user.*','users.national_id as nationalCode','users.image as image','users.first_name as firstName','users.last_name as lastName',
+    'tasks.title as taskTitle',)
     ->join('users','users.id','=','project_task_user.user_id')
     ->join('tasks','tasks.id','=','project_task_user.task_id')
     ->where('project_task_user.id','=',$id)

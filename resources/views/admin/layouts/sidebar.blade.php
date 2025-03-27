@@ -19,9 +19,18 @@
                 class="fa fa-folder-open mr-2" style="font-size: 20px;" aria-hidden="true"></i>مدیریت پروژه ها</a>
     </li>
     <li class="side a-collapse short ">
-        <a href="{{ url('tasks/index') }}" class="side-item @if(Request::segment(1) == 'tasks')bg-primary text-white @endif "   ><i class="fa fa-tasks mr-2" style="font-size: 20px;" aria-hidden="true"></i>مدیریت وظایف</a>
-                مدیریت عناوین شغلی</a>
+        <a href="{{ url('tasks/index') }}" class="side-item @if(Request::segment(1) == 'tasks')bg-primary text-white @endif "   ><i class="fa fa-tasks mr-2" style="font-size: 20px;" aria-hidden="true"></i>مدیریت وظایف </a>
+              
     </li>
+    <li class="side a-collapse short ">
+        <a href="{{ url('attendance/index') }}" class="side-item @if(Request::segment(1) == 'attendance')bg-primary text-white @endif "   ><i class="fa fa-clock mr-2" style="font-size: 20px;" aria-hidden="true"></i>  حضور و غیاب اتوماتیک</a>
+               </a>
+    </li>
+    <li class="side a-collapse short ">
+        <a href="" class="side-item @if(Request::segment(1) == '')bg-primary text-white @endif "   ><i class="fa fa-pencil-alt mr-2" style="font-size: 20px;" aria-hidden="true"></i> حضور و غیاب دستی</a>
+                مدیریت حضور و غیاب دستی </a>
+    </li>
+    
     <ul class="side a-collapse short ">
         <a class="ul-text  fnt-mxs"><i class="fas fa-tachometer-alt mr-1"></i> صفحه
             <!-- <span class="badge badge-info">4</span> -->

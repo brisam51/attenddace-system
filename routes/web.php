@@ -1,12 +1,14 @@
 <?php
 
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\taskController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\taskController;
 use App\Http\Controllers\Admin\AddressController;
 use App\Http\Controllers\Admin\BankInfoController;
-use App\Http\Controllers\ProjecttaskUserController;
+use App\Http\Controllers\ProjectTaskUserController;
+use App\Http\Controllers\AttendanceController;
 
 Route::get('/', function () {
     return view('admin.user.dashboard');
@@ -14,7 +16,7 @@ Route::get('/', function () {
 
 //Personal Details
 Route::get('user/index', [UserController::class, 'index']);
-//Route::get('/', [UserController::class, 'dashboard']);
+
 Route::get('user/show/{id}', [UserController::class, 'show'])->name("get.user.details");
 Route::get('user/new', [UserController::class, 'newUserView']);
 Route::post('user/store', [UserController::class, 'store'])->name('create.user');
@@ -47,9 +49,15 @@ Route::post("projects/update/{id}", [ProjectController::class, 'update'])->name(
 Route::get("projects/delete/{id}", [ProjectController::class, 'destroy'])->name('projects.delete');
 
 //Project task User
-Route::get("project/member/index/{projectId}", [ProjecttaskUserController::class, 'fetchMemberByProjectId'])->name('projects.members');
-Route::get("project/member/create/{projectId}", [ProjecttaskUserController::class, 'addMemberView'])->name('project-member.create');
-Route::post("project/member/store", [ProjecttaskUserController::class, 'addMember'])->name('project-member.store');
-Route::get("project/member/edit/{id}", [ProjecttaskUserController::class, 'editMember'])->name('project-member.edit');
-Route::post("project/member/update/{id}", [ProjecttaskUserController::class, 'updateMember'])->name('project-member.update');
-Route::get("project/member/delete/{id}", [ProjecttaskUserController::class, 'deleteMember'])->name('project-member.delete');
+Route::get("project/member/index/{projectId}", [ProjectTaskUserController::class, 'fetchMemberByProjectId'])->name('projects.members');
+Route::get("project/member/create/{projectId}", [ProjectTaskUserController::class, 'addMemberView'])->name('project-member.create');
+Route::post("project/member/store", [ProjectTaskUserController::class, 'addMember'])->name('project-member.store');
+Route::get("project/member/edit/{id}", [ProjectTaskUserController::class, 'editMember'])->name('project-member.edit');
+Route::post("project/member/update/{id}", [ProjectTaskUserController::class, 'updateMember'])->name('project-member.update');
+Route::get("project/member/delete/{id}", [ProjectTaskUserController::class, 'deleteMember'])->name('project-member.delete');
+//attendance    
+Route::get("attendance/index", [AttendanceController::class, 'index'])->name('attendance.index');
+Route::get("attendance/create", [AttendanceController::class, 'create'])->name('attendance.create');
+Route::post("attendance/store", [AttendanceController::class, 'store'])->name('attendance.store');
+Route::get("attendance/edit/{id}", [AttendanceController::class, 'edit'])->name('attendance.edit');
+Route::post("attendance/update/{id}", [AttendanceController::class, 'update'])->name('attendance.update');
