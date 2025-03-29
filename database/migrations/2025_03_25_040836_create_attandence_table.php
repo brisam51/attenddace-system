@@ -15,13 +15,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('project_id')->constrained('projects');
-            $table->date('start_date');
-            $table->date('end_date');
-            $table->time('start_time');
-            $table->time('end_time');
-            $table->float('total_hours');
+            $table->date('work_date')->nullable();
+            $table->time('start_time')->nullable();
+            $table->time('end_time')->nullable();
+            $table->float('total_time')->nullable();
             $table->foreignId('created_by')->constrained('users');
-            $table->foreignId('updated_by')->constrained('users');  
+            $table->foreignId('updated_by')->constrained('users');
             $table->timestamps();
         });
     }

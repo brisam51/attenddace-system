@@ -11,9 +11,11 @@
 <!-- Moment-jalaali for date conversion -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-jalaali/0.9.2/moment-jalaali.min.js"></script>
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{asset('dashboard/js/main.js')}}"></script>
 <script src="{{asset('dashboard/js/custom.js')}}"></script>
 <script src="{{asset('dashboard/js/address-modal.js')}}"></script>
 <script src="{{asset('dashboard/js/bank_user_info.js')}}"></script>
-<script src="{{asset('dashboard/js/start_attendance.js')}}"></script>
+<script src="{{asset('dashboard/js/attendance.js')}}"></script>
 @yield('script')

@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Attendance extends Model
 {
     //fillable fields
-   protected $fillable =['user_id','project_id','start_date','end_date','start_time',
-   'end_time','total_hours','status','created_by','updated_by'];
+   protected $fillable =['user_id','project_id','work_date','start_time',
+   'end_time','total_time','created_by','updated_by'];
    //table name
    protected $table = 'attendance';
 
