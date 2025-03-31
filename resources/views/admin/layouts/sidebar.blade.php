@@ -23,7 +23,7 @@
               
     </li>
     <li class="side a-collapse short ">
-        <a href="{{ url('attendance/index') }}" class="side-item @if(Request::segment(1) == 'attendance')bg-primary text-white @endif "   ><i class="fa fa-clock mr-2" style="font-size: 20px;" aria-hidden="true"></i>  حضور و غیاب اتوماتیک</a>
+        <a href="{{ route('attendance.index') }}" class="side-item  "   ><i class="fa fa-clock mr-2" style="font-size: 20px;" aria-hidden="true"></i>  حضور و غیاب اتوماتیک</a>
                </a>
     </li>
     <li class="side a-collapse short ">

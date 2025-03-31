@@ -56,7 +56,8 @@ Route::get("project/member/edit/{id}", [ProjectTaskUserController::class, 'editM
 Route::post("project/member/update/{id}", [ProjectTaskUserController::class, 'updateMember'])->name('project-member.update');
 Route::get("project/member/delete/{id}", [ProjectTaskUserController::class, 'deleteMember'])->name('project-member.delete');
 //attendance    
-Route::get("attendance/index/{id}", [AttendanceController::class, 'index'])->name('attendance.index');
+Route::get("attendance/index", [AttendanceController::class, 'index'])->name('attendance.index');
+Route::get("attendance/daily/summary/{id}", [AttendanceController::class, 'dailySummery'])->name('attendance.daily.summery');
 Route::post("attendance/start/time", [AttendanceController::class, 'startAttendance'])->name('attendance.start-time');
 Route::post("attendance/end/time", [AttendanceController::class, 'endAttendance'])->name('attendance.end-time');
 Route::get("attendance/edit/{id}", [AttendanceController::class, 'edit'])->name('attendance.edit');

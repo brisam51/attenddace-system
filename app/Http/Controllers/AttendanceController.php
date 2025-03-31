@@ -40,18 +40,20 @@ class AttendanceController extends Controller
    {
       $validated = $request->validate([
          'user_id' => 'required|exists:users,id',
-         'project_id' => 'required|accepted|exists:projects,id',
+         'project_id' => 'required|exists:projects,id',
       ]);
       try {
-         //check if the user has already started attendance for the current day
-         $ExistAttendance = Attendance::where('user_id', $validated['user_id'])
-            ->whereDate('created_at', Carbon::today())
+         //check if the user has already active attendance (starte
+         $activeAttendance = Attendance::where('user_id', $validated['user_id'])
+            ->whereNull('end_time')
             ->first();
-         if ($ExistAttendance) {
+         if ($activeAttendance) {
             return response()->json([
                'success' => false,
-               'message' => 'You have already started attendance for the current day'], 400);
+               'message' => 'لطفا به فعالیت های خود در پروژه های دیگر پایان دهید'
+            ], 400);
          }
+
          $workDate = Carbon::now()->format('Y-m-d');
          $startTime = Carbon::now()->format('H:i:s');
          $attendance = Attendance::create([
@@ -61,15 +63,21 @@ class AttendanceController extends Controller
             'created_by' => $validated['user_id'],
             'start_time' =>  $startTime,
          ]);
-         return response()->json([
-            'success' => true, 'message' => 'Attendance started successfully',
-             'data' => $attendance],
-              200);
+         return response()->json(
+            [
+               'success' => true,
+               'message' => 'حضور شما در پروژه با موفقیت ثبت شد!',
+               'data' => $attendance
+            ],
+            200
+         );
       } catch (Exception $e) {
          Log::error($e->getMessage());
          return response()->json([
             'success' => false,
-            'message' => 'Something went wrong', 'error' => $e->getMessage()], 500);
+            'message' => 'خطایی رخ داده است. لطفا مجددا تلاش کنید ',
+            'error' => $e->getMessage()
+         ], 500);
       }
    }
    //call the end attendance  
@@ -77,59 +85,71 @@ class AttendanceController extends Controller
    {
       $validated = $request->validate([
          'user_id' => 'required|exists:users,id',
-         'project_id' => 'required|accepted|exists:projects,id',
+         'project_id' => 'required|exists:projects,id',
       ]);
+
       try {
          $user_id = $request->user_id;
-     
-         $attendance =  Attendance::where('user_id', $user_id)->whereNull('end_time')->first();
-         //check if attendance is already started  
-         $startTimeExist = Attendance::where('user_id', $user_id)->whereNull('end_time')->exists();
-         if ($startTimeExist) {
-            //check if attendance is already ended
-            $endTimeExist = Attendance::where('user_id', $user_id)->whereNotNull('end_time')->exists();
-            if ($endTimeExist) {
-               return response()->json([
-                  'success' => false,
-                  'message' => 'Attendance already ended.']);
-            } else {
-               $startTime = $attendance->start_time;
-               $endTime = Carbon::now()->format(' H:i:s');
-               $pars_startTime = Carbon::parse($startTime);
-               $parsedEndTime = Carbon::parse($endTime);
-               $workTime = $pars_startTime->diffInMinutes($parsedEndTime);
-               $attendance->update([
-                  'end_time' =>  $endTime,
-                  'total_time' =>  $workTime,
-               ]);
-               return response()->json([
-                  'success' => true,
-                  'message' => 'Attendance ended successfully.']);
-            }
-         } else {
-
+         $project_id = $request->project_id;
+         $attendance =  Attendance::where('user_id', $user_id)
+            ->where('project_id', $project_id)
+            ->whereNull('end_time')
+            ->latest('start_time')
+            ->first();
+         if (!$attendance) {
             return response()->json([
                'success' => false,
-               'message' => 'Attendance not started.']);
+               'message' => 'No attendance found for the user'
+            ], 404);
          }
+         $startTime = Carbon::parse($attendance->start_time);
+         $endTime = Carbon::now();
+         //prevent ending time  before start time
+         if ($endTime->lt($startTime)) {
+            return response()->json([
+               'success' => false,
+               'message' => 'ثبت پایان حضور نباید قبل از ثبت شروع حضور انجام گیرد.'
+            ], 400);
+         }
+         $workTime = $startTime->diffInMinutes($endTime);
+         $attendance->update([
+            'end_time' =>  $endTime->format('H:i:s'),
+            'total_time' =>  $workTime,
+         ]);
+         return response()->json([
+            'success' => true,
+            'message' => 'Attendance updated successfully',
+            'data' => [
+               'start_time' => $startTime->format('H:i:s'),
+               'end_time' => $endTime->format('H:i:s'),
+               'total_time' => $workTime
+            ]
+         ]);
       } catch (Exception $e) {
          Log::error($e->getMessage());
          return response()->json([
             'success' => false,
-            'message' => 'Something went wrong'], 500);
+            'message' => 'خطایی رخ داده است. لطفا مجددا تلاش کنید.'
+         ], 500);
       }
+   } //end end time function
+   //new methode to get user's daily  attendance summry
+   public function dailySummery($usr_id)
+   {
+      $today = Carbon::today()->format('Y-m-d');
+      $attendance = Attendance::where('user_id', $usr_id)->whereDate('work_date', $today)
+         ->with('project:id,title')
+         ->get();
+      $totalMinutes = $attendance->sum('total_time');
+      return response()->json([
+         'success' => true,
+         'message' => 'Attendance summery',
+         'data' => [
+            'attendance' => $attendance,
+            'total_hours' =>floor($totalMinutes/60) ,
+            'total_minutes'=>$totalMinutes%60,
+            'total_projects' => $attendance->groupBy('project_id')->count()
+         ]
+      ]);
    }
-
-//   public function endAttendance(Request $request)
-//    {
-//       try {
-//          $attendance = Attendance::where('user_id', Auth::user()->id)->where('end_time', null)->first();
-//          if ($attendance) {
-//             if ($attendance->end_time != null) {
-//                return response()->json([
-//                   'success' => false,
-//             'm essage' => 'Something went wrong'], 500);
-//       }
-//    }
-   
-      }
+}
