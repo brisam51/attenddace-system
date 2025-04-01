@@ -99,7 +99,7 @@ class AttendanceController extends Controller
          if (!$attendance) {
             return response()->json([
                'success' => false,
-               'message' => 'No attendance found for the user'
+               'message' => 'ثبت حضوری برای شما یافت نشد لطفا در ابتدا ثبت حضور بنمایید'
             ], 404);
          }
          $startTime = Carbon::parse($attendance->start_time);
@@ -111,14 +111,14 @@ class AttendanceController extends Controller
                'message' => 'ثبت پایان حضور نباید قبل از ثبت شروع حضور انجام گیرد.'
             ], 400);
          }
-         $workTime = $startTime->diffInMinutes($endTime);
+         $workTime = $startTime->floatDiffInMinutes($endTime);
          $attendance->update([
             'end_time' =>  $endTime->format('H:i:s'),
             'total_time' =>  $workTime,
          ]);
          return response()->json([
             'success' => true,
-            'message' => 'Attendance updated successfully',
+            'message' => 'خروج از پروژه با موفقیت ثبت شد',
             'data' => [
                'start_time' => $startTime->format('H:i:s'),
                'end_time' => $endTime->format('H:i:s'),
@@ -151,5 +151,39 @@ class AttendanceController extends Controller
             'total_projects' => $attendance->groupBy('project_id')->count()
          ]
       ]);
+   }
+   //Manual store attendance
+   public function storeManual(Request $request){
+      $validated=$request->validate([
+         'user_ids.*'=>'required|exists:users,id',
+         'user_ids'=>'required|array',
+         'project_id'=>'required|exists:projects,id',
+         'work_date'=>'required',
+         'start_time'=>'required',
+         'end_time'=>'required',
+        
+      ]);
+      try {
+
+         $attendance = new Attendance();
+         $attendance->user_id = $request->user_id;
+         $attendance->project_id = $request->project_id;
+         $attendance->work_date = $request->work_date;
+         $attendance->start_time = $request->start_time;
+         $attendance->end_time = $request->end_time;
+         $attendance->total_time = $request->total_time;
+         $attendance->save();
+         return response()->json([
+            'success' => true,
+            'message' => 'Attendance stored successfully',
+            'data' => $attendance
+         ]);
+   }catch (\Exception $e) {
+         return response()->json([
+            'success' => false,
+            'message' => 'Something went wrong',
+            'data' => $e->getMessage()
+         ]);
+      }
    }
 }

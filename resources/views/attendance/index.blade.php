@@ -23,7 +23,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
-        
+
             @if (session('error'))
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <i class="fas fa-exclamation-circle me-2"></i>
@@ -31,7 +31,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
-        
+
             @if ($errors->any())
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <i class="fas fa-exclamation-triangle me-2"></i>
@@ -45,7 +45,7 @@
             @endif
         </div>
         {{-- end success error messags --}}
-                <div class="card-body">
+        <div class="card-body">
             <div class="table-responsive">
                 <table id="user-table" class=" user-table">
                     <thead>
@@ -61,11 +61,16 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td class="start-attendance " data-id="{{ $value['project_id'] }}"
                                     data-user={{ $user_id }}>
-                                                                   <div class="row d-flex justify-content-center align-items-center">
-                                        <div class="col"> <a href="#" data-id="{{ $value['project_id'] }}" data-user="{{ $user_id }}" class="btn btn-primary start-time" style="width: 100p; float: right;">ورود </a>
+                                    <div class="row d-flex justify-content-center align-items-center">
+                                        <div class="col"> <a href="#" data-id="{{ $value['project_id'] }}"
+                                                data-user="{{ $user_id }}" class="btn btn-primary start-time"
+                                                style="width: 100p; float: right;">ورود </a>
                                         </div>
                                         <div class="col">{{ $value['project_title'] }}</div>
-                                        <div class="col"> <a href="#" data-id="{{ $value['project_id'] }}" data-user="{{ $user_id }}"  class="btn btn-success text-center end-time" style="width:100px; float:left;">خروج</a>
+                                        <div class="col"> <a href="#" data-id="{{ $value['project_id'] }}"
+                                                data-user="{{ $user_id }}"
+                                                class="btn btn-success text-center end-time"
+                                                style="width:100px; float:left;">خروج</a>
                                         </div>
 
 

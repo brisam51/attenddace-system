@@ -18,7 +18,7 @@ $(function () {
                 if (response.success) {
                     successCallback(response);
                 } else {
-                    showAlert('error', response.message);
+                    showAlert('success','success', response.message);
                    // restButton(button, originalText);
                 }
 
@@ -52,18 +52,23 @@ $(function () {
     }
     );
     //Alert function
-    function showAlert(type, message,timer=2500) {
-        const config={ icon: type,
-            title: type.charAt(0).toUpperCase() + type.slice(1),
+    function showAlert(icon, message,timer=2500) {
+       const config = {
+            icon: icon,
             text: message,
+            timer: timer,
+            toast: true,
+            position: "top",
             showConfirmButton: false,
-            timer: timer
-        };
-        if (type === 'error') {
-            config.icon = 'error';
-            config.title = 'Error';
-        }
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+
+       }
        
+       Swal.fire(config);
       
     }//end of alert function
 

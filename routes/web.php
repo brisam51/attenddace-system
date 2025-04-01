@@ -5,10 +5,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\taskController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\Admin\AddressController;
 use App\Http\Controllers\Admin\BankInfoController;
 use App\Http\Controllers\ProjectTaskUserController;
-use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\ManualAttendanceController;
 
 Route::get('/', function () {
     return view('admin.user.dashboard');
@@ -55,10 +56,15 @@ Route::post("project/member/store", [ProjectTaskUserController::class, 'addMembe
 Route::get("project/member/edit/{id}", [ProjectTaskUserController::class, 'editMember'])->name('project-member.edit');
 Route::post("project/member/update/{id}", [ProjectTaskUserController::class, 'updateMember'])->name('project-member.update');
 Route::get("project/member/delete/{id}", [ProjectTaskUserController::class, 'deleteMember'])->name('project-member.delete');
-//attendance    
+// Automatic attendance    
 Route::get("attendance/index", [AttendanceController::class, 'index'])->name('attendance.index');
 Route::get("attendance/daily/summary/{id}", [AttendanceController::class, 'dailySummery'])->name('attendance.daily.summery');
 Route::post("attendance/start/time", [AttendanceController::class, 'startAttendance'])->name('attendance.start-time');
 Route::post("attendance/end/time", [AttendanceController::class, 'endAttendance'])->name('attendance.end-time');
 Route::get("attendance/edit/{id}", [AttendanceController::class, 'edit'])->name('attendance.edit');
 Route::post("attendance/update/{id}", [AttendanceController::class, 'update'])->name('attendance.update');
+//Manual attendance
+Route::get("manual/attendance/index", [ManualAttendanceController::class, 'index'])->name('manual-attendance.index');
+Route::get("manual/attendance/members/{id}", [ManualAttendanceController::class, 'getMembers'])->name('manual-attendance.members');
+Route::post("manual/attendance/store", [ManualAttendanceController::class, 'store'])->name('manual-attendance.store');
+Route::get("manual/attendance/delete/{id}", [ManualAttendanceController::class, 'delete'])->name('manual-attendance.delete');
