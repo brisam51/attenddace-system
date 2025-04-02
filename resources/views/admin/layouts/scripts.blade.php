@@ -17,6 +17,7 @@
 <script src="{{asset('dashboard/js/custom.js')}}"></script>
 <script src="{{asset('dashboard/js/address-modal.js')}}"></script>
 <script src="{{asset('dashboard/js/bank_user_info.js')}}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script src="{{asset('dashboard/js/manual_attendance.js')}}"></script>
 <script src="{{asset('dashboard/js/attendance.js')}}"></script>
 @yield('script')

@@ -17,14 +17,14 @@
             </div>
         @endif
         @if (session()->has('error'))
-            <div class="alert alert-success">
+            <div class="alert alert-danger">
                 {{ session('error') }}
             </div>
         @endif
 
     </div>
     <h3>   : {{ $project->title }}</h3>
-    <form action="{{ url('/manual/attendance/store') }}" id="manual_attendance_form" method="post" class="form-horizontal" enctype="multipart/form-data">
+    <form  id="manual_attendance_form"   >
         @csrf
         <div class="form-group">
             <input  id="project_id" class="form-control" type="hidden" name="project_id" value="{{ $project->id }}">
@@ -102,5 +102,3 @@
     </form>
 @endsection
 
-@section('scripts')
-@endsection
