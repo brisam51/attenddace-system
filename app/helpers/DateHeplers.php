@@ -17,21 +17,10 @@ class DateHeplers
     {
         //
     }
-    public static function englishToPersianNumber($number)
-    {
-        $persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
-
-        $englishDigits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-
-        $persianNumber = str_replace($englishDigits, $persianDigits, $number);
-
-        return $persianNumber;
-    }
+   
     public static  function persianToEnglishDate($string)
     {
-//=============================
 
-        //========================
         $persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
         $englishDigits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
@@ -50,10 +39,8 @@ class DateHeplers
     $carbonDate = Carbon::parse($date);
         $jalaliDate = Jalalian::fromCarbon($carbonDate)->format('Y/m/d');
 
-        return self::englishToPersianNumber($jalaliDate);
+        return NumberConverter::englishToPersianNumber($jalaliDate);
     }
 
-    //convert English number to persian
-   
+    
 }
-

@@ -36,13 +36,13 @@ $(function () {
     $("#manual_attendance_form").submit(function (e) {
         e.preventDefault();
        
-      
+      try {
         var form = $(this);
        
         var selectedUserIds=[];
-      var  selectedUserIds=$('input[name="user_ids[]"]:checked').each(function() {
-            selectedUserIds.push($(this).val());
-        });
+      var  selectedUserIds=$('input[name="user_ids[]"]:checked').map(function(){
+            return $(this).val();
+      }).get();
         var formData = {
             'start_time':$("#start_time").val(),
             'end_time': $("#end_time").val(),
@@ -68,23 +68,27 @@ $(function () {
             data: formData,
             dataType: "json",
             success: function (response) {
-                if (response.success == true) {
+                if (response.success ===true) {
                     $('#manual_attendance_form')[0].reset();
-                   alert(data.message);
+                   console.log(response.data);
                     toastr.success(response.message);
                 } else{ 
                     toastr.error(response.message);
                 }
             },
             
-           error: function (response) {
-           if(response.success == false){
-                toastr.error(response.message);
-           }
-                toastr.error
+           error: function (xhr) {
+           var ErrorMessage=xhr.responseJSON?xhr.responseJSON.message:'Something went wrong';
+                toastr.error(ErrorMessage);
            }
             
         });
-        console.log(formData);
-    });
+      }catch(error){
+       toastr.error('Error:',error.message);
+      
+      }
+      
+      
+      
+    });//end form submit
 });//end class
