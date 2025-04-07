@@ -113,7 +113,7 @@ class AttendanceController extends Controller
                'message' => 'ثبت پایان حضور نباید قبل از ثبت شروع حضور انجام گیرد.'
             ], 400);
          }
-         $workTime = $startTime->floatDiffInMinutes($endTime);
+         $workTime = $startTime->diffInMinutes($endTime) / 60;;
          $attendance->update([
             'end_time' =>  $endTime->format('H:i:s'),
             'total_time' =>  $workTime,
