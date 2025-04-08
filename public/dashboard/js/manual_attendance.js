@@ -26,7 +26,7 @@ $(function () {
         onlyTimePicker: true,
         timePicker: {
            // enabled:true,
-            DefaultTime:false,
+            defaultTime:false,
            showSeconds: false,
             showMeridian: true,
         },
@@ -70,25 +70,47 @@ $(function () {
             success: function (response) {
                 if (response.success ===true) {
                     $('#manual_attendance_form')[0].reset();
-                   console.log(response.data);
-                    toastr.success(response.message);
-                } else{ 
-                    toastr.error(response.message);
+                 showAlert('success',response.message);
+                   // toastr.success(response.message);
+                } else{
+                    showAlert('error',response.message); 
+                    //toastr.error(response.message);
                 }
             },
             
            error: function (xhr) {
            var ErrorMessage=xhr.responseJSON?xhr.responseJSON.message:'Something went wrong';
-                toastr.error(ErrorMessage);
+                //toastr.error(ErrorMessage);
+                showAlert('error',ErrorMessage);
            }
             
         });
       }catch(error){
-       toastr.error('Error:',error.message);
-      
+       //toastr.error('Error:',error.message);
+       showAlert('error',error.message);
       }
       
       
       
     });//end form submit
+
+    function showAlert(icon, message,timer=3500) {
+        const config = {
+             icon: icon,
+             text: message,
+             timer: timer,
+             toast: true,
+             position: "top",
+             showConfirmButton: true,
+             timerProgressBar: true,
+             didOpen: (toast) => {
+                 toast.addEventListener('mouseenter', Swal.stopTimer)
+                 toast.addEventListener('mouseleave', Swal.resumeTimer)
+             }
+ 
+        }
+        
+        Swal.fire(config);
+       
+     }//end of alert function
 });//end class

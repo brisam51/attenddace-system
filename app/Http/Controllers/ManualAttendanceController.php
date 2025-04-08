@@ -36,7 +36,7 @@ class ManualAttendanceController extends Controller
    {
 
       try {
-         //Valid
+         //Validate
          $validated = $request->validate([
             'user_ids.*' => 'required|exists:users,id',
             'user_ids' => 'required|array',
@@ -48,7 +48,9 @@ class ManualAttendanceController extends Controller
          ]);
          //che if exist at least one of strt time or end time
          if ($request->input('start_time') == null && $request->input('end_time') == null) {
-            throw new \Illuminate\Validation\ValidationException('At least one of start time or end time is required');
+            return response()->json([
+               'success' => false,
+               'message' => 'At least one of start time or end time is required'], 422);
          }
 
          $workDate = $request->input('work_date');
@@ -76,12 +78,24 @@ class ManualAttendanceController extends Controller
                   continue;
                }
                //check if user has already attendance for this date
-               $userExist = Attendance::where('user_id', $userId)->where('work_date', $work_date)->first();
+               $attendanceRecord = Attendance::where('user_id', $userId)->where('work_date', $work_date)->first();
                //prepar start time and end time
                $start_time = $startTime ? Carbon::createFromFormat('H:i', NumberConverter::persianToEnglishNumber($startTime))->format('H:i')
-                  : ($userExist ? $userExist->start_time : null);
+                  : ( $attendanceRecord ?  $attendanceRecord->start_time : null);
                $end_time = $endTime ? Carbon::createFromFormat('H:i', NumberConverter::persianToEnglishNumber($endTime))->format('H:i')
-                  : ($userExist ? $userExist->end_time : null);
+                  : ( $attendanceRecord ?  $attendanceRecord->end_time : null);
+                  //validate start time and end time
+                  // Validate start_time and end_time logic
+                if ($start_time && $end_time && Carbon::createFromFormat('H:i', $end_time)->lessThan(Carbon::createFromFormat('H:i', $start_time))) {
+                  $errors[] = "End time cannot be earlier than start time for user ID {$userId}.";
+                  continue;
+              }
+
+              // Alert admin if there is a start time but no end time
+              if ($attendanceRecord && $attendanceRecord->start_time && !$attendanceRecord->end_time) {
+                  $errors[] = "User ID {$userId} has a start time but no end time. Please add the end time before registering a new start time.";
+                  continue;
+              }
                // calculate total time
                $total_time = null;
                if ($start_time && $end_time) {
@@ -97,22 +111,21 @@ class ManualAttendanceController extends Controller
                   'project_id' => $projectId,
                   'work_date' => $work_date,
 
-               ], [
-
-                  'start_time' => $start_time,
-                  'end_time' => $end_time,
+               ],  [
+                  'start_time' => $start_time ?? $attendanceRecord?->start_time, // Preserve existing start_time if not provided
+                  'end_time' => $end_time ?? $attendanceRecord?->end_time,       // Preserve existing end_time if not provided
                   'total_time' => $total_time,
-               ]);
-               $attendance->wasRecentlyCreated() ? $createdCount++ : $updatedCount++;
+              ]);
+               //$attendance->wasRecentlyCreated() ? $createdCount++ : $updatedCount++;
+               $attendance->wasRecentlyCreated ? $createdCount++ : $updatedCount++;
             } catch (Exception $e) {
-               Log::error("Error proccessing attendance for user {$userId}:" . $e->getMessage());
-               $errors[] = "Error proccessing attendance for user {$userId}: " . $e->getMessage();
+                           $errors[] = "Error proccessing attendance for user {$userId}: " . $e->getMessage();
             }
          }
          //Build response
          $response = [
             'success' => true,
-            'message' => 'Attendance added successfully',
+            'message' => 'حضور با موفقیت ثبت شد',
             'data' => [
                'created' => $createdCount,
                'updated' => $updatedCount,
@@ -122,10 +135,19 @@ class ManualAttendanceController extends Controller
 
          ];
          //Improve prtial success
-         if ($createdCount == 0 && $updatedCount == 0) {
-            $response['success'] = false;
-            $response['message'] = 'No attendance records were created or updated.';
-         }
+         // if ($createdCount == 0 && $updatedCount == 0) {
+         //    $response['success'] = false;
+         //    $response['message'] = 'No attendance records were created or updated.';
+         // }
+          // Handle partial success
+        if ($createdCount == 0 && $updatedCount == 0 && $skippedCount > 0) {
+         $response['success'] = true;
+         $response['message'] = 'No new attendance records were created or updated because they already exist.';
+     } elseif ($createdCount == 0 && $updatedCount == 0 && count($errors) > 0) {
+         $response['success'] = false;
+         $response['message'] = 'Failed to process attendance records.';
+     }
+
 
          return response()->json($response, $response['success'] ? 200 : 400);
       } catch (\Illuminate\Validation\ValidationException $e) {

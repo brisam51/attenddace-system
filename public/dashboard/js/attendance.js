@@ -60,7 +60,7 @@ $(function () {
             toast: true,
             position: "top",
             showConfirmButton: false,
-            timerProgressBar: true,
+            timerProgressBar: false,
             didOpen: (toast) => {
                 toast.addEventListener('mouseenter', Swal.stopTimer)
                 toast.addEventListener('mouseleave', Swal.resumeTimer)
