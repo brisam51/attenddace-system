@@ -46,15 +46,20 @@
                            <td>{{ $loop->iteration }}</td>  
                            <td>
                             <div class="d-flex align-items-center space-y-2">
-                               <div class="col">
-                                <a href="{{ url('manual/attendance/members/'.$item->id) }}" class="btn btn-primary text-center" style="width: 80px;">in</a>
-                               </div>
+                               
                                <div class="col">
                                 {{ $item->title }}
                                </div>
                                <div class="col">
-                             
+                                <a href="{{ url('manual/attendance/members/'.$item->id) }}" class="btn btn-primary text-center"> حضورو غیاب جدید</a>
                                </div>
+                               <div class="col">
+                                <a href="{{ url('manual/attendance/members/'.$item->id) }}" class="btn btn-info text-center">بروز رسانی</a>
+                               </div>
+                               <div class="col">
+                                <a href="{{ url('manual/attendance/members/'.$item->id) }}" class="btn btn-danger text-center">حذف</a>
+                               </div>
+                               
                             </div>
                           
                            

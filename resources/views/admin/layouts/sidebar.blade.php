@@ -30,6 +30,10 @@
         <a href="{{ url('manual/attendance/index') }}" class="side-item @if(Request::segment(1)== 'manual')bg-primary text-white @endif "   ><i class="fa fa-pencil-alt mr-2" style="font-size: 20px;" aria-hidden="true"></i> حضور و غیاب دستی</a>
                 مدیریت حضور و غیاب دستی </a>
     </li>
+    <li class="side a-collapse short ">
+        <a href="{{ url('manual/attendance/update') }}" class="side-item @if(Request::segment(1)== 'manual')bg-primary text-white @endif "   ><i class="fa fa-pencil-alt mr-2" style="font-size: 20px;" aria-hidden="true"></i> حضور و غیاب دستی</a>
+               بروز رسانی حضور و غیاب </a>
+    </li>
     
     <ul class="side a-collapse short ">
         <a class="ul-text  fnt-mxs"><i class="fas fa-tachometer-alt mr-1"></i> صفحه

@@ -67,4 +67,5 @@ Route::post("attendance/update/{id}", [AttendanceController::class, 'update'])->
 Route::get("manual/attendance/index", [ManualAttendanceController::class, 'index'])->name('manual-attendance.index');
 Route::get("manual/attendance/members/{id}", [ManualAttendanceController::class, 'getMembers'])->name('manual-attendance.members');
 Route::post("/manual/attendance/store", [ManualAttendanceController::class, 'storeManual']);
+Route::post('manual/attendance/update', [ManualAttendanceController::class, 'updateAttendance'])->name('manual-attendance.update');
 Route::get("manual/attendance/delete/{id}", [ManualAttendanceController::class, 'delete'])->name('manual-attendance.delete');

@@ -30,141 +30,175 @@ class ManualAttendanceController extends Controller
       $members = $project->users;
       return view('attendance.manual_attendance_form', ['members' => $members, 'project' => $project]);
    }
-
-
-   public function storeManual(Request $request)
-   {
-
-      try {
-         //Validate
-         $validated = $request->validate([
+//register attendance manually
+public function storeManual(Request $request)
+{
+    try {
+        // Validate input
+        $validated = $request->validate([
             'user_ids.*' => 'required|exists:users,id',
             'user_ids' => 'required|array',
             'project_id' => 'required|exists:projects,id',
             'work_date' => 'required',
             'start_time' => 'nullable',
             'end_time' => 'nullable',
+        ]);
 
-         ]);
-         //che if exist at least one of strt time or end time
-         if ($request->input('start_time') == null && $request->input('end_time') == null) {
+        // Check if at least one of start time or end time is provided
+        if ($request->input('start_time') == null && $request->input('end_time') == null) {
             return response()->json([
-               'success' => false,
-               'message' => 'At least one of start time or end time is required'], 422);
-         }
+                'success' => false,
+                'message' => 'At least one of start time or end time is required'
+            ], 422);
+        }
 
-         $workDate = $request->input('work_date');
-         $startTime = $request->input('start_time');
-         $endTime = $request->input('end_time');
-         $projectId = $request->input('project_id');
-         $userIds = $request->input('user_ids');
-         $user_attendance = Attendance::where('user_id', $userIds)->where('work_date', $workDate)->first();
-         //convert persian  Date  to Gregorian
-         $work_date = DateHeplers::persianToEnglishDate($workDate)->format('Y-m-d');
-         //Fetch all users
-         $users = User::whereIn('id', $userIds)->get()->keyBy('id');
-         //check if user has already attendance for this date
-         $createdCount = 0;
-         $updatedCount = 0;
-         $skippedCount = 0;
-         $errors = [];
+        // Prepare data
+        $workDate = DateHeplers::persianToEnglishDate($request->input('work_date'))->format('Y-m-d');
+        $startTime = $request->input('start_time') 
+            ? Carbon::createFromFormat('H:i', NumberConverter::persianToEnglishNumber($request->input('start_time')))->format('H:i')
+            : null;
+        $endTime = $request->input('end_time') 
+            ? Carbon::createFromFormat('H:i', NumberConverter::persianToEnglishNumber($request->input('end_time')))->format('H:i')
+            : null;
+        $projectId = $request->input('project_id');
+        $userIds = $request->input('user_ids');
 
-         foreach ($userIds as $userId) {
+        // Fetch all users at once
+        $users = User::whereIn('id', $userIds)->get()->keyBy('id');
+
+        $createdCount = 0;
+        $updatedCount = 0;
+        $skippedCount = 0;
+        $errors = [];
+
+        foreach ($userIds as $userId) {
             try {
-               //check if user exist
-               if (!isset($users[$userId])) {
-                  $skippedCount++;
-                  $errors[] = "User with id {$userId}not found";
-                  continue;
-               }
-               //check if user has already attendance for this date
-               $attendanceRecord = Attendance::where('user_id', $userId)->where('work_date', $work_date)->first();
-               //prepar start time and end time
-               $start_time = $startTime ? Carbon::createFromFormat('H:i', NumberConverter::persianToEnglishNumber($startTime))->format('H:i')
-                  : ( $attendanceRecord ?  $attendanceRecord->start_time : null);
-               $end_time = $endTime ? Carbon::createFromFormat('H:i', NumberConverter::persianToEnglishNumber($endTime))->format('H:i')
-                  : ( $attendanceRecord ?  $attendanceRecord->end_time : null);
-                  //validate start time and end time
-                  // Validate start_time and end_time logic
-                if ($start_time && $end_time && Carbon::createFromFormat('H:i', $end_time)->lessThan(Carbon::createFromFormat('H:i', $start_time))) {
-                  $errors[] = "End time cannot be earlier than start time for user ID {$userId}.";
-                  continue;
-              }
+                // Check if user exists
+                if (!isset($users[$userId])) {
+                    $skippedCount++;
+                    $errors[] = "User with id {$userId} not found";
+                    continue;
+                }
 
-              // Alert admin if there is a start time but no end time
-              if ($attendanceRecord && $attendanceRecord->start_time && !$attendanceRecord->end_time) {
-                  $errors[] = "User ID {$userId} has a start time but no end time. Please add the end time before registering a new start time.";
-                  continue;
-              }
-               // calculate total time
-               $total_time = null;
-               if ($start_time && $end_time) {
-                  $start = Carbon::createFromFormat('H:i', $start_time);
-                 $end=Carbon::createFromFormat('H:i', $end_time); 
-                 $total_time=$start->diffInMinutes($end) / 60;
-               }
+                // Find existing attendance record
+                $attendanceRecord = Attendance::where('user_id', $userId)
+                    ->where('work_date', $workDate)
+                    ->where('project_id', $projectId)
+                    ->first();
 
+                // Handle end time only scenario
+                if (!$startTime && $endTime && $attendanceRecord) {
+                    // Only update end time if there's an existing record with start time
+                    if ($attendanceRecord->start_time) {
+                        $attendanceRecord->end_time = $endTime;
+                        $attendanceRecord->total_time = $this->calculateTotalTime($attendanceRecord->start_time, $endTime);
+                        $attendanceRecord->save();
+                        $updatedCount++;
+                        continue;
+                    } else {
+                        $errors[] = "Cannot add end time without start time for user ID {$userId}";
+                        continue;
+                    }
+                }
 
+                // Validate time logic
+                if ($startTime && $endTime && Carbon::createFromFormat('H:i', $endTime)->lessThan(Carbon::createFromFormat('H:i', $startTime))) {
+                    $errors[] = "End time cannot be earlier than start time for user ID {$userId}";
+                    continue;
+                }
 
-               $attendance = Attendance::updateOrCreate([
-                  'user_id' => $userId,
-                  'project_id' => $projectId,
-                  'work_date' => $work_date,
+                // Calculate total time if both times are provided
+                $totalTime = ($startTime && $endTime) 
+                    ? $this->calculateTotalTime($startTime, $endTime)
+                    : null;
 
-               ],  [
-                  'start_time' => $start_time ?? $attendanceRecord?->start_time, // Preserve existing start_time if not provided
-                  'end_time' => $end_time ?? $attendanceRecord?->end_time,       // Preserve existing end_time if not provided
-                  'total_time' => $total_time,
-              ]);
-               //$attendance->wasRecentlyCreated() ? $createdCount++ : $updatedCount++;
-               $attendance->wasRecentlyCreated ? $createdCount++ : $updatedCount++;
+                // Create or update attendance record
+                $attendance = Attendance::updateOrCreate(
+                    [
+                        'user_id' => $userId,
+                        'project_id' => $projectId,
+                        'work_date' => $workDate,
+                    ],
+                    [
+                        'start_time' => $startTime ?? ($attendanceRecord->start_time ?? null),
+                        'end_time' => $endTime ?? ($attendanceRecord->end_time ?? null),
+                        'total_time' => $totalTime ?? $attendanceRecord->total_time ?? null,
+                    ]
+                );
+
+                $attendance->wasRecentlyCreated ? $createdCount++ : $updatedCount++;
+
             } catch (Exception $e) {
-                           $errors[] = "Error proccessing attendance for user {$userId}: " . $e->getMessage();
+                $errors[] = "Error processing attendance for user {$userId}: " . $e->getMessage();
+                Log::error("Attendance processing error for user {$userId}: " . $e->getMessage());
             }
-         }
-         //Build response
-         $response = [
+        }
+
+        // Build response
+        $response = [
             'success' => true,
             'message' => 'حضور با موفقیت ثبت شد',
             'data' => [
-               'created' => $createdCount,
-               'updated' => $updatedCount,
-               'skipped' => $skippedCount,
-               'errors' => $errors,
+                'created' => $createdCount,
+                'updated' => $updatedCount,
+                'skipped' => $skippedCount,
+                'errors' => $errors,
             ],
+        ];
 
-         ];
-         //Improve prtial success
-         // if ($createdCount == 0 && $updatedCount == 0) {
-         //    $response['success'] = false;
-         //    $response['message'] = 'No attendance records were created or updated.';
-         // }
-          // Handle partial success
-        if ($createdCount == 0 && $updatedCount == 0 && $skippedCount > 0) {
-         $response['success'] = true;
-         $response['message'] = 'No new attendance records were created or updated because they already exist.';
-     } elseif ($createdCount == 0 && $updatedCount == 0 && count($errors) > 0) {
-         $response['success'] = false;
-         $response['message'] = 'Failed to process attendance records.';
-     }
+        // Handle partial success cases
+        if ($createdCount == 0 && $updatedCount == 0) {
+            if ($skippedCount > 0) {
+                $response['message'] = 'No new attendance records were created or updated because they already exist.';
+            } elseif (count($errors) > 0) {
+                $response['success'] = false;
+                $response['message'] = 'Failed to process attendance records.';
+            }
+        }
 
+        return response()->json($response, $response['success'] ? 200 : 400);
 
-         return response()->json($response, $response['success'] ? 200 : 400);
-      } catch (\Illuminate\Validation\ValidationException $e) {
-         Log::error($e->getMessage());
-         return response()->json([
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        Log::error($e->getMessage());
+        return response()->json([
             'success' => false,
-            'message' => 'Vaildation failed',
-            'data' => $e->getMessage(),
+            'message' => 'Validation failed',
             'errors' => $e->errors(),
-         ], 422);
-      } catch (\Exception $e) {
-         Log::error('Attendance store error:' . $e->getMessage() . "\n" . $e->getTraceAsString());
-         return response()->json([
+        ], 422);
+    } catch (\Exception $e) {
+        Log::error('Attendance store error:' . $e->getMessage() . "\n" . $e->getTraceAsString());
+        return response()->json([
             'success' => false,
-            'message' => 'An unexpected error occurred while processing attendance.' . $e->getMessage(),
-            'errors' => $e->getMessage()
-         ], 500);
-      }
-   } //end of manal store attendance
+            'message' => 'An unexpected error occurred while processing attendance.',
+            'error' => $e->getMessage()
+        ], 500);
+    }
 }
+
+// Helper function to calculate total time
+private function calculateTotalTime($startTime, $endTime)
+{
+    $start = Carbon::createFromFormat('H:i', $startTime);
+    $end = Carbon::createFromFormat('H:i', $endTime);
+    return $start->diffInMinutes($end) / 60;
+}
+//update attendance
+public function updateAttandance(Request $request){
+    try {
+        $attendance = Attendance::find($request->id);
+        $attendance->update($request->all());
+        return response()->json([
+            'success' => true,
+            'message' => 'Attendance updated successfully',
+            'data' => $attendance
+        ], 200);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'An error occurred while updating attendance',
+            'error' => $e->getMessage()
+        ], 500);
+    }
+}
+   
+}//end  class 

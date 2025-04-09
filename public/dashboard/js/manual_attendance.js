@@ -3,7 +3,12 @@ $(function () {
 
     $("#work_date").persianDatepicker({
         format: "YYYY/MM/DD",
-      
+        initialValue: false ,// Ensures it respects the input's value
+        onShow: function() {
+            // Correct the date by subtracting 1 day if needed
+            var correctDate = new persianDate().startOf('day').subtract('days', 1);
+            $("#work_date").val(correctDate.format('YYYY/MM/DD'));
+        }
         
     });
 
