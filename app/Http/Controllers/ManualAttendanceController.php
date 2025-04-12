@@ -181,89 +181,11 @@ class ManualAttendanceController extends Controller
         return $start->diffInMinutes($end) / 60;
     }
     //
-    public function editAttendance($id)
-    {
-        $project = Project::find($id);
-        $members = $project->users;
-
-        return view('attendance.editAttendanceForm', ['members' => $members, 'project' => $project]);
-    }
+   
 
 
-    //update attendance
-    public function updateAttandance(Request $request)
-    {
-        try {
-            $validatedData = $request->validate([
-                'user_ids.*' => 'exists:attendance,user_id',
-                'user_ids' => 'required|array',
-                'project_id' => 'required|exists:projects,id',
-                'work_date' => 'nullable|string',
-                'start_time' => 'nullable|string',
-                'end_time' => 'nullable|string',
-            ]);
-              
-            try {
-                $workDate = $request->has('work_date') 
-                    ? DateHeplers::persianToEnglishDate($request->work_date)->format('Y-m-d')
-                    : null;
-                   
-                $startTime = $request->input('start_time')
-                    ? Carbon::createFromFormat('H:i', NumberConverter::persianToEnglishNumber($request->input('start_time')))->format('H:i')
-                    : null;
-                    
-                $endTime = $request->input('end_time')
-                    ? Carbon::createFromFormat('H:i', NumberConverter::persianToEnglishNumber($request->input('end_time')))->format('H:i')
-                    : null;
-            } catch (\Exception $e) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Invalid date/time format',
-                ], 400);
-            }
-    
-            foreach ($validatedData['user_ids'] as $userId) {
-                $updateData = [];
-                $starttime='start_time';
-             $project=Attendance::where('user_id',$userId)->where('work_date',$workDate) ->first();
-                       
-            
-                Log::info('data',[$project]);
-                if ($request->has('work_date')) {
-                    $updateData['work_date'] = $workDate;
-                }
-                
-                if ($request->has('start_time')) {
-                   
-                    $updateData['start_time'] = $startTime;
-                }
-                
-                if ($request->has('end_time')) {
-                    $updateData['end_time'] = $endTime;
-                }
-                
-                if ($request->has('start_time') && $request->has('end_time')) {
-                    $totalTime = Carbon::parse($startTime)->diffInMinutes(Carbon::parse($endTime));
-                    $updateData['total_time'] = $totalTime;  
-                }
-                
-                // Update with proper filters
-               
-              // $attendance->update($updateData);
-            }      
-              
-            return response()->json([
-                'success' => true,
-                'message' => 'Attendance records updated successfully.',
-            ]);
-            
-        } catch (Exception $e) {
-            Log::error('Error updating attendance records: ' . $e->getMessage().''.$e->getTraceAsString());
-            return response()->json([
-                'success' => false,
-                'message' => 'An unexpected error occurred while processing attendance.',
-                'error' => $e->getMessage()
-            ], 500);
-        }
-    }
+ 
+
+//Start New Aproach
+
 }//end  class 
