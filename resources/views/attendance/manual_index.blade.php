@@ -54,7 +54,7 @@
                                 <a href="{{ url('manual/attendance/members/'.$item->id) }}" class="btn btn-primary text-center"> حضورو غیاب جدید</a>
                                </div>
                                <div class="col">
-                                <a href="{{ url('manual/attendance/members/'.$item->id) }}" class="btn btn-info text-center">بروز رسانی</a>
+                                <a href="{{ url('manual/attendance/edit/'.$item->id) }}" class="btn btn-info text-center">بروز رسانی</a>
                                </div>
                                <div class="col">
                                 <a href="{{ url('manual/attendance/members/'.$item->id) }}" class="btn btn-danger text-center">حذف</a>

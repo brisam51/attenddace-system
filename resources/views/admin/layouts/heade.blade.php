@@ -27,6 +27,9 @@
 <!-- SweetAlert2 CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    {{-- pwt persian date picker --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pwt-datepicker@latest/dist/css/persian-datepicker.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pwt-datepicker@latest/dist/css/persian-datepicker.min.css">
     {{-- <link rel="stylesheet" href="{{url('dashboard/css/main.css')}}"> --}}
     {{-- <link rel="stylesheet" href="{{ url('persian_datepicker/css/persian-datepicker.css') }}" /> --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">

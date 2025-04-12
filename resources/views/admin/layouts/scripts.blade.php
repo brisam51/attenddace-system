@@ -1,9 +1,8 @@
-
- <script src="{{ url('dashboard/js/vendor/modernizr.js') }}"></script>
+<script src="{{ url('dashboard/js/vendor/modernizr.js') }}"></script>
 <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js"
     integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous">
 </script>
- <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 <script src="{{ asset('dashboard/js/persianumber.min.js') }}"></script>
 <script src="{{ asset('persian_datepicker/js/persian-date.js') }}"></script>
 <script src="{{ asset('persian_datepicker/js/persian-datepicker.js') }}"></script>
@@ -13,11 +12,17 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-jalaali/0.9.2/moment-jalaali.min.js"></script>
 <!-- SweetAlert2 JS -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="{{asset('dashboard/js/main.js')}}"></script>
-<script src="{{asset('dashboard/js/custom.js')}}"></script>
-<script src="{{asset('dashboard/js/address-modal.js')}}"></script>
-<script src="{{asset('dashboard/js/bank_user_info.js')}}"></script>
+{{-- pwt persian date picker --}}
+<script src="https://cdn.jsdelivr.net/npm/pwt-datepicker@latest/dist/js/persian-date.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pwt-datepicker@latest/dist/js/persian-datepicker.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pwt-datepicker@latest/dist/js/persian-date.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pwt-datepicker@latest/dist/js/persian-datepicker.min.js"></script>
+{{-- end persian dat picker --}}
+<script src="{{ asset('dashboard/js/main.js') }}"></script>
+<script src="{{ asset('dashboard/js/custom.js') }}"></script>
+<script src="{{ asset('dashboard/js/address-modal.js') }}"></script>
+<script src="{{ asset('dashboard/js/bank_user_info.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-<script src="{{asset('dashboard/js/manual_attendance.js')}}"></script>
-<script src="{{asset('dashboard/js/attendance.js')}}"></script>
+<script src="{{ asset('dashboard/js/manual_attendance.js') }}"></script>
+<script src="{{ asset('dashboard/js/attendance.js') }}"></script>
 @yield('script')
