@@ -84,8 +84,8 @@
                                 <td>
                                     <div class="col">
                                         <div class="row">
-                                            <a href="{{ url('user/edit/' . $user->id) }}" class="link link-green">بروز
-                                                رسانی</a>
+                                            <a href="{{ url('user/edit/' . $user->id) }}" class="link link-green">
+                                                اصلاح</a>
                                         </div>
                                         <div class="mt-2 row">
                                             <a href="{{ url('user/delete/' . $user->id) }}" class="link link-red">حذف</a>

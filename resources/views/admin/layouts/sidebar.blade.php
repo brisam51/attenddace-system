@@ -28,7 +28,11 @@
     </li>
     <li class="side a-collapse short ">
         <a href="{{ url('manual/attendance/index') }}" class="side-item @if(Request::segment(1)== 'manual')bg-primary text-white @endif "   ><i class="fa fa-pencil-alt mr-2" style="font-size: 20px;" aria-hidden="true"></i> حضور و غیاب دستی</a>
-                حضور و غیاب دستی</a>
+              
+    </li>
+    <li class="side a-collapse short ">
+        <a href="{{ url('manual/attendance/getActiveUsers') }}" class="side-item @if(Request::segment(1)== 'manual')bg-primary text-white @endif "   ><i class="fa fa-pencil-alt mr-2" style="font-size: 20px;" aria-hidden="true"></i> Indevisual Attendance</a>
+              
     </li>
     
     

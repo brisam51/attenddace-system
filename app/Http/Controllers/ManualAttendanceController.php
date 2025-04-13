@@ -180,12 +180,66 @@ class ManualAttendanceController extends Controller
         $end = Carbon::createFromFormat('H:i', $endTime);
         return $start->diffInMinutes($end) / 60;
     }
-    //
    
+   
+//get all user that member in active projects
+public function getActiveProjectMembers(Request $request){
+    $activeProject = Project::where('status', 0)->with('users')->get();
+    $activeUsers=$activeProject->flatMap(function($project){
+        return $project->users;
+    })->unique('id');
+    //Log::info('all project', ['active-user' => $activeUsers])
+    return view("attendance.active_members",["activeUsers"=> $activeUsers]);
+}
 
+ //get list of projects that user is member of
+public function getActiveProjects($id){
+    try{
+        $user = User::find($id);
+        if($user){
+            $projects = $user->projects()->where('status', 0)->get();
+            return view("attendance.project_list",["projects"=> $projects,"user_id"=> $user->id]);
+        }
+        return view("attendance.project_list",["projects"=> []]);
+    }catch(Exception $e){
+        
+    }
+   
+}
 
- 
+//show attendance details list
+public function attendanceDetails($project_id, $user_id){
+    try{
+        $user= User::find($user_id)->only('first_name','last_name');
+  $project = Project::find($project_id)->only('id','title');
+    $attendance = Attendance::getAttendanceDetails($user_id, $project_id);
+   
+    return view('attendance.attendance_details',
+    ['attendance'=> $attendance,'user'=>$user,'project'=>$project]);
+    }catch(Exception $e){
+        return redirect()->back()->with('error', $e->getMessage());
+    }
+  
+}
 
-//Start New Aproach
+//edit attendnance details form
+public function attendanceEditDetails($attendance_id){
+  try{
+    $attendance = Attendance::find($attendance_id);
+    $attendance['workDate'] =DateHeplers::gregorianToPersianDate($attendance->work_date) ;
+    $attendance['startTime'] =NumberConverter::englishToPersianNumber($attendance->start_time);
+    $attendance['endTime'] =NumberConverter::englishToPersianNumber($attendance->end_time);
 
+    return view('attendance.edit_details_form',['attendance'=>$attendance]);
+  }catch(Exception $e){
+    return redirect()->back()->with('error', $e->getMessage());
+  }
+   
+}
+//update attendance details
+public function updateAttendanceDetails(Request $request, $id){
+    dd($request->all());
+    $attendance = Attendance::find($request->attendance_id);
+    
+}
 }//end  class 
