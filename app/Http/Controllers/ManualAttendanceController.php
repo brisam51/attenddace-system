@@ -180,66 +180,99 @@ class ManualAttendanceController extends Controller
         $end = Carbon::createFromFormat('H:i', $endTime);
         return $start->diffInMinutes($end) / 60;
     }
-   
-   
-//get all user that member in active projects
-public function getActiveProjectMembers(Request $request){
-    $activeProject = Project::where('status', 0)->with('users')->get();
-    $activeUsers=$activeProject->flatMap(function($project){
-        return $project->users;
-    })->unique('id');
-    //Log::info('all project', ['active-user' => $activeUsers])
-    return view("attendance.active_members",["activeUsers"=> $activeUsers]);
-}
 
- //get list of projects that user is member of
-public function getActiveProjects($id){
-    try{
-        $user = User::find($id);
-        if($user){
-            $projects = $user->projects()->where('status', 0)->get();
-            return view("attendance.project_list",["projects"=> $projects,"user_id"=> $user->id]);
+
+    //get all user that member in active projects
+    public function getActiveProjectMembers(Request $request)
+    {
+        $activeProject = Project::where('status', 0)->with('users')->get();
+        $activeUsers = $activeProject->flatMap(function ($project) {
+            return $project->users;
+        })->unique('id');
+        //Log::info('all project', ['active-user' => $activeUsers])
+        return view("attendance.active_members", ["activeUsers" => $activeUsers]);
+    }
+
+    //get list of projects that user is member of
+    public function getActiveProjects($id)
+    {
+        try {
+            $user = User::find($id);
+            if ($user) {
+                $projects = $user->projects()->where('status', 0)->get();
+                return view("attendance.project_list", ["projects" => $projects, "user_id" => $user->id]);
+            }
+            return view("attendance.project_list", ["projects" => []]);
+        } catch (Exception $e) {
         }
-        return view("attendance.project_list",["projects"=> []]);
-    }catch(Exception $e){
-        
     }
-   
-}
 
-//show attendance details list
-public function attendanceDetails($project_id, $user_id){
-    try{
-        $user= User::find($user_id)->only('first_name','last_name');
-  $project = Project::find($project_id)->only('id','title');
-    $attendance = Attendance::getAttendanceDetails($user_id, $project_id);
-   
-    return view('attendance.attendance_details',
-    ['attendance'=> $attendance,'user'=>$user,'project'=>$project]);
-    }catch(Exception $e){
-        return redirect()->back()->with('error', $e->getMessage());
+    //show attendance details list
+    public function attendanceDetails($project_id, $user_id)
+    {
+        try {
+            $user = User::find($user_id)->only('first_name', 'last_name','id');
+            $project = Project::find($project_id)->only('id', 'title');
+            $attendance = Attendance::getAttendanceDetails($user_id, $project_id);
+
+            return view(
+                'attendance.attendance_details',
+                ['attendance' => $attendance, 'user' => $user, 'project' => $project]
+            );
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
-  
-}
 
-//edit attendnance details form
-public function attendanceEditDetails($attendance_id){
-  try{
-    $attendance = Attendance::find($attendance_id);
-    $attendance['workDate'] =DateHeplers::gregorianToPersianDate($attendance->work_date) ;
-    $attendance['startTime'] =NumberConverter::englishToPersianNumber($attendance->start_time);
-    $attendance['endTime'] =NumberConverter::englishToPersianNumber($attendance->end_time);
+    //edit attendnance details form
+    public function attendanceEditDetails($attendance_id)
+    {
+        try {
+            $attendance = Attendance::find($attendance_id);
+            $attendance['workDate'] = DateHeplers::gregorianToPersianDate($attendance->work_date);
+            $attendance['startTime'] = NumberConverter::englishToPersianNumber($attendance->start_time);
+            $attendance['endTime'] = NumberConverter::englishToPersianNumber($attendance->end_time);
 
-    return view('attendance.edit_details_form',['attendance'=>$attendance]);
-  }catch(Exception $e){
-    return redirect()->back()->with('error', $e->getMessage());
-  }
-   
-}
-//update attendance details
-public function updateAttendanceDetails(Request $request, $id){
+            return view('attendance.edit_details_form', ['attendance' => $attendance]);
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+    //Add new attendance details manually
+    public function addNewAttendanceManully($project_id, $user_id){
+       return view('attendance.new_attendance_form',['user_id' => $user_id, 'project_id' => $project_id]); 
+    }
+//store new attendance details
+public function createManualAttendance(Request $request){
     dd($request->all());
-    $attendance = Attendance::find($request->attendance_id);
-    
 }
+    //update attendance details
+    public function updateAttendanceDetails(Request $request, $id)
+    {
+
+        try {
+            $validated = $request->validate([
+                'work_date' => 'nullable|string',
+                'start_time' => 'nullable|string',
+                'end_time' => 'required|string'
+            ]);
+            //Convert strinf date,start time and end time to gergorian date format
+            $attendanceDetails = Attendance::findOrFail($id);
+            $workDate = DateHeplers::persianToEnglishDate($validated['work_date'])->format('Y-m-d');
+            $startTime = Carbon::parse(NumberConverter::persianToEnglishNumber($validated['start_time']));
+            $endTime = Carbon::parse(NumberConverter::persianToEnglishNumber($validated['end_time']));
+            $totalTime = $startTime->diffInMinutes($endTime) / 60;
+            if (!empty($attendanceDetails)) {
+                $attendanceDetails->update([
+                    'work_date' => $workDate,
+                    'start_time' => $startTime->format('H:i'),
+                    'end_time' => $endTime->format('H:i'),
+                    'total_time' => $totalTime,
+                ]);
+            }
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
 }//end  class 

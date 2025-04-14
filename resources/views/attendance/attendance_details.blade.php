@@ -48,9 +48,13 @@
             {{-- end success error messags --}}
            <a href="{{ route('manual-attendance.activeProjects',$project['id']) }}" class="btn btn-primary mb-3" style="width: 80px;">بازگشت</a>
         <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">لیست فعالیت های کاربر 
-                    :  {{$user['first_name']}}  {{$user['last_name']}}  {{$project['title']}}</h3>
+            <div class="card-header d-flex justify-content-between align-items-center">
+                 
+                <a href="{{route('manual-attendance.addManual',['user_id'=>$user['id'],'project_id'=>$project['id']])}}" class="btn btn-success mb-3" style="width: 80px;">جدید</a>
+                  
+                    <h3 class="card-title text-center flex-grow-1">لیست فعالیت های کاربر 
+                        :  {{$user['first_name']}}  {{$user['last_name']}}  {{$project['title']}}</h3>  
+               
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -73,11 +77,13 @@
                                     <td>{{ $item->projectTitle }}</td>
                                     <td>{{ $item->work_date }}</td>
                                     <td>{{ $item->start_time }}</td>
-                                    <td>{{ $item->end_time }}</td>
+                                    <td>
+                                       
+                                        {{ $item->end_time }}</td>
                                     <td>{{ $item->total_time }}</td>
                                     <td>
-                                        <a href="{{url('attendance_edit/details/'.$item->id)}}">edit</a>
-                                        {{ $item->id }}
+                                        <a href="{{url('attendance_edit/details/'.$item->id)}}" class="btn btn-info">edit</a>
+                                       
                                     </td>
                                 </tr>
                             @endforeach
