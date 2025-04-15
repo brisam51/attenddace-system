@@ -1,6 +1,6 @@
 <?php
 
-namespace App\helpers;
+namespace App\Helpers;
 
 use Morilog\Jalali\Jalalian;
 
@@ -8,7 +8,7 @@ use Illuminate\Support\Carbon;
 use Carbon\Exceptions\Exception;
 use Exception as InvalidDateException;  // Add this line
 
-class DateHeplers
+class DateHelpers
 {
     /**
      * Create a new class instance.

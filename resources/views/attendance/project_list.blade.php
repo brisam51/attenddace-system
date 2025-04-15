@@ -47,8 +47,11 @@ project list
             @endif
         </div>
      <div class="card">
-        <div class="card-header">
-<a href="#" class="btn btn-primary" onclick="window.history.back();">Back</a>
+        <div class="card-header d-flex justify-content-between align-items-start">
+            <a href="{{route('manual-attendance.activeUsers')}}" class="btn btn-primary"  style="width: 100px; height: 40px; font-size: 15px; margin-bottom: 10px; margin-left: 10px;">بازگشت</a>
+            <div class="card-title text-centerc flex-grow-1>Project List">لیست پروژهایی که کار درآنها فعال است{{$user->first_name}} {{$user->last_name}}</div>
+           
+
         </div>
         </div>
         <div class="card-body">
@@ -71,11 +74,12 @@ project list
                             <td>{{$loop->iteration}}</td>
                             <td>{{$project->title}}</td>
                             <td>{{$project->code}}</td>
-                            <td>{{$project->start_date}}</td>
-                            <td>{{$project->end_date}}</td>
+                            <td>{{\App\Helpers\DateHelpers::gregorianToPersianDate($project->start_date)}}</td>
+                            <td>{{\App\Helpers\DateHelpers::gregorianToPersianDate($project->end_date)}}</td>
+                          
                             <td>{{$project->status}}
                             <td>
-                                <a href="{{route('manual-attendance.details',['project_id'=>$project->id,'user_id'=>$user_id])}}">نمایش</a>
+                                <a href="{{route('manual-attendance.details',['project_id'=>$project->id,'user_id'=>$user->id])}}"  class="btn btn-success">جزییات حضور غیاب</a>
                             </td>
                           </tr>
                        @endforeach

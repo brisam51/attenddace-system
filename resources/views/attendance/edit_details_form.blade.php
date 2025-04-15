@@ -25,7 +25,7 @@ Update Attendance
     </div>
   <div class="card">
     <div class="card-header">
-        <a href="#" class="btn btn-primary" onclick="history.back()">Back</a>
+        <a href="{{route('manual-attendance.details',['project_id'=>$attendance->project_id,'user_id'=>$attendance->user_id])}}"  class="btn btn-primary" style="width: 100px; float: right; margin: 5px;" >باز گشت</a>
     </div>
     <div class="card-body">
         <form  action="{{route('attendance-details.update',$attendance->id)}}"  method="POST" >

@@ -67,7 +67,7 @@ Active Members
                            <td><img src="{{ asset('assets/images/' . $value->image) }}" class="user-image" alt="No Image"></td>
                             <td>{{$value->first_name}}</td>
                             <td>{{$value->last_name}}</td>
-                            <td>{{$value->national_id}}</td>
+                            <td>{{\App\Helpers\NumberConverter::englishToPersianNumber($value->national_id)}}</td>
                             <td>
                                 <a href="{{url('manual/attendance/getActiveProjects/'.$value->id)}}"  class="btn btn-success">Active Project</a>
                             </td>

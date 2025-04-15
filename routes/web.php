@@ -75,7 +75,7 @@ Route::get("manual/attendance/delete/{id}", [ManualAttendanceController::class, 
 Route::get("manual/attendance/getActiveUsers", [ManualAttendanceController::class, 'getActiveProjectMembers'])->name("manual-attendance.activeUsers");
 Route::get("manual/attendance/getActiveProjects/{id}", [ManualAttendanceController::class, 'getActiveProjects'])->name("manual-attendance.activeProjects");
 Route::get('manual/attendance/details/{project_id}/{user_id}', [ManualAttendanceController::class, 'attendanceDetails'])->name('manual-attendance.details');
-Route::get('manulal/add/attendance/{project_id}/{user_id}', [ManualAttendanceController::class, 'addNewAttendanceManully'])->name('manual-attendance.createAttendance');
+Route::get('manulal/add/attendance/{project_id}/{user_id}', [ManualAttendanceController::class, 'addNewAttendanceManully'])->name('manual-attendance.addForm');
 Route::post('manual/attendance/create', [ManualAttendanceController::class, 'createManualAttendance'])->name('manual-attendance.createManualAttendance');
 Route::get('attendance_edit/details/{id}', [ManualAttendanceController::class, 'attendanceEditDetails'])->name('attendance_edit.details');
 Route::post('attendance_update/details/{id}', [ManualAttendanceController::class,'updateAttendanceDetails'])->name('attendance-details.update');

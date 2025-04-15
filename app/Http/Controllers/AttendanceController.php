@@ -113,10 +113,10 @@ class AttendanceController extends Controller
                'message' => 'ثبت پایان حضور نباید قبل از ثبت شروع حضور انجام گیرد.'
             ], 400);
          }
-         $workTime = $startTime->diffInMinutes($endTime) / 60;;
+         $formatedTotalTime =Number_format($startTime->diffInMinutes($endTime) / 60,2);
          $attendance->update([
             'end_time' =>  $endTime->format('H:i:s'),
-            'total_time' =>  $workTime,
+            'total_time' => $formatedTotalTime,
          ]);
          return response()->json([
             'success' => true,
@@ -124,7 +124,7 @@ class AttendanceController extends Controller
             'data' => [
                'start_time' => $startTime->format('H:i:s'),
                'end_time' => $endTime->format('H:i:s'),
-               'total_time' => $workTime
+              
             ]
          ]);
       } catch (Exception $e) {

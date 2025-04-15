@@ -1,8 +1,8 @@
 <?php
 
-namespace App\helpers;
+namespace App\Helpers;
 
-class colors
+class Colors
 {
     /**
      * Create a new class instance.

@@ -4,7 +4,7 @@
     New Attendance
 @endsection
 @section('dashboard')
-    New Attendance
+    ثبت حضور و غیاب جدید
 @endsection
 @section('my-style')
     <script></script>
@@ -25,7 +25,7 @@
     </div>
     <div class="card">
         <div class="card-header">
-            <a href="#" class="btn btn-primary" onclick="history.back()">Back</a>
+            <a href="{{route('manual-attendance.details',['project_id'=>$project_id,'user_id'=>$user_id])}}" class="btn btn-primary" onclick="history.back()" style="width:120px; "> بازگشت</a>
         </div>
         <div class="card-body">
             <form action="{{ route('manual-attendance.createManualAttendance') }}" method="POST">

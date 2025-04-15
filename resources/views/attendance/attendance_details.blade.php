@@ -50,7 +50,7 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                  
-                <a href="{{route('manual-attendance.addManual',['user_id'=>$user['id'],'project_id'=>$project['id']])}}" class="btn btn-success mb-3" style="width: 80px;">جدید</a>
+                <a href="{{route('manual-attendance.addForm',['project_id'=>$project->id,'user_id'=>$user->id])}}" class="btn btn-success mb-3" style="width: 130px;">حضور غیاب جدید</a>
                   
                     <h3 class="card-title text-center flex-grow-1">لیست فعالیت های کاربر 
                         :  {{$user['first_name']}}  {{$user['last_name']}}  {{$project['title']}}</h3>  
@@ -75,14 +75,14 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item->projectTitle }}</td>
-                                    <td>{{ $item->work_date }}</td>
-                                    <td>{{ $item->start_time }}</td>
+                                    <td>{{ App\Helpers\DateHelpers::gregorianToPersianDate($item->work_date)}}</td>
+                                    <td>{{ App\Helpers\NumberConverter::englishToPersianNumber($item->start_time) }}</td>
                                     <td>
                                        
-                                        {{ $item->end_time }}</td>
-                                    <td>{{ $item->total_time }}</td>
+                                        {{ App\Helpers\NumberConverter::englishToPersianNumber($item->end_time) }}</td>
+                                    <td>{{ App\Helpers\NumberConverter::englishToPersianNumber($item->total_time)}}</td>
                                     <td>
-                                        <a href="{{url('attendance_edit/details/'.$item->id)}}" class="btn btn-info">edit</a>
+                                        <a href="{{url('attendance_edit/details/'.$item->id)}}" class="btn btn-info">اصلاح حضور غیاب</a>
                                        
                                     </td>
                                 </tr>

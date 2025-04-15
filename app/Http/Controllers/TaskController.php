@@ -11,7 +11,7 @@ use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use Exception;
 
-class taskController extends Controller
+class TaskController extends Controller
 {
     public function index()
     {
