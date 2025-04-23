@@ -1,11 +1,11 @@
 @extends('admin.layouts.app')
 
 @section('title')
-project list
+Active Members
 @endsection
 
 @section('dashboard')
-project list
+Active Members
 @endsection
 
 @section('my-style')
@@ -14,9 +14,9 @@ project list
 
 
 @section('content')
-
-   
-        
+<div class="jumbotron shade pt-2 pb-3">
+    <div class="container">
+        {{-- start success /error messages --}}
         <div class="flash-messages">
             @if (session('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -46,63 +46,47 @@ project list
                 </div>
             @endif
         </div>
-     <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-start">
-            <a href="{{route('manual-attendance.activeUsers')}}" class="btn btn-primary"  style="width: 100px; height: 40px; font-size: 15px; margin-bottom: 10px; margin-left: 10px;">بازگشت</a>
-            <div class="card-title text-centerc flex-grow-1>Project List">لیست پروژهایی که کار درآنها فعال است{{$user->first_name}} {{$user->last_name}}</div>
-           
-
-        </div>
-        </div>
+        {{-- end success error messags --}}
         <div class="card-body">
             <div class="table-responsive">
                 <table id="user-table" class=" user-table">
                     <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">عنوان پروژه</th>
-                            <th scope="col">کد پروژه</th>
-                            <th scope="col">تاریخ شروع</th>
-                            <th scope="col">تاریخ پایان</th>
-                            <th scope="col">وضعیت</th>
-                            <th scope="col">عملیات</th>
+                            <th scope="col">تصویر</th>
+                            <th scope="col">نام</th>
+                            <th scope="col">نام و نام خانوادگی</th>
+                            <th scope="col">کدملی</th>
+                            <th scope="col">جزییات پرداخت</th>
                         </tr>
                     </thead>
                     <tbody>
-                       @foreach ($projects as $project)
-                          <tr>
-                            <td>{{$loop->iteration}}</td>
-                            <td>{{$project->title}}</td>
-                            <td>{{$project->code}}</td>
-                            <td>{{\App\Helpers\DateHelpers::gregorianToPersianDate($project->start_date)}}</td>
-                            <td>{{\App\Helpers\DateHelpers::gregorianToPersianDate($project->end_date)}}</td>
-                          
-                            <td>{{$project->status}}
-                            <td>
-                                <a href="{{route('manual-attendance.details',['project_id'=>$project->id,'user_id'=>$user->id])}}"  class="btn btn-success">جزییات حضور غیاب</a>
-                            </td>
-                          </tr>
-                       @endforeach
-                   
-                    <tbody>
-                       
+                        @foreach ($active_members as $value)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td><img src="{{ asset('assets/images/'.$value["image"]) }}" alt="" class="user-image"></td>
+                            <td>{{$value->first_name}}</td>
+                            <td>{{$value->last_name}}</td>
+                            <td>{{\App\Helpers\NumberConverter::englishToPersianNumber($value->national_id)}}</td>
+                            <td><a href="{{route('payment.calculate', $value->id)}}"><button class="btn btn-primary">پرداخت</button></a></td>
+                        </tr> 
+                        @endforeach
 
                     </tbody>
                 </table>
 
             </div>
         </div>
-     </div>
-       
-    
-  
+
+    </div>
    
-       
+        </div>
+
+    </div>
 
 
 
-
-
+</div>
 
 
 @endsection

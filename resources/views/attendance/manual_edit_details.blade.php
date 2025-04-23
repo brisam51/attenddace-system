@@ -25,29 +25,29 @@ Update Attendance
     </div>
   <div class="card">
     <div class="card-header">
-        <a href="{{route('manual-attendance.details',['project_id'=>$attendance->project_id,'user_id'=>$attendance->user_id])}}"  class="btn btn-primary" style="width: 100px; float: right; margin: 5px;" >باز گشت</a>
+        <a href="{{route("manual-attendance.activeProjects",$attendance['userId'])}}" class="btn btn-primary" style="width: 100px; float: right; margin: 5px;" >بازگشت</a>
     </div>
     <div class="card-body">
-        <form  action="{{route('attendance-details.update',$attendance->id)}}"  method="POST" >
+        <form  action="{{route('attendance-details.update',$attendance['id'])}}"  method="POST" >
             @csrf
             
             <div class="form-group">
                 <label for="work_date">تاریخ:</label>
-                <input id="work_date"  type="text" name="work_date" class="form-control" value="{{ old('work_date',$attendance->workDate) }}">
+                <input id="work_date"  type="text" name="work_date" class="form-control" value="{{ $attendance['work_date']}}">
                 @error('work_date')
                     <span class="text-danger">{{ $message }}</span>
                 @enderror
             </div>
             <div class="form-group">
                 <label for="start_time">زمان شروع</label>
-                <input id="start_time"  type="text" name="start_time" class="form-control" value="{{ old('start_time', $attendance->startTime) }}" placeholder="لطفا زمان شروع را وارد کنید">
+                <input id="start_time"  type="text" name="start_time" class="form-control" value="{{  $attendance['start_time']}}" placeholder="لطفا زمان شروع را وارد کنید">
                 @error('start_time')
                     <span class="text-danger">{{ $message }}</span>
                 @enderror
             </div>
             <div class="form-group">
                 <label for="end_time">زمان پایان</label>
-                <input id="end_time"  type="text" name="end_time" class="form-control" value="{{ old('end_time',$attendance->endTime) }}" placeholder="لطفا زمان پایان را وارد کنید">
+                <input id="end_time"  type="text" name="end_time" class="form-control" value="{{ $attendance['end_time'] }}" placeholder="لطفا زمان پایان را وارد کنید">
                 @error('end_time')
                     <span class="text-danger">{{ $message }}</span>
                 @enderror

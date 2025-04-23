@@ -13,14 +13,18 @@ class Task extends Model
 
 //Define realtionship to User model via ProjectTaskUser
 public function users(){
-    return $this->belongsToMany(User::class,'Project_task_user','task_id','user_id')
+    return $this->belongsToMany(User::class,'Project_task_user','task_id')
 
     ->withPivot('project_id','file_contract');
 }
 
 //Define relationship to Project model via ProjectTaskUser
 public function projects(){
-    return $this->belongsToMany(Project::class,'Project_task_user','task_id','project_id')
+    return $this->belongsToMany(Project::class,'Project_task_user','task_id')
     ->withPivot('user_id','file_contract');
 }
-}
+
+
+
+   
+}//end class

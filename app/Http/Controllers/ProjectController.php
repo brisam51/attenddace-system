@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\helpers\DateHeplers;
+use App\Helpers\DateHelpers;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use Exception;
@@ -35,8 +35,8 @@ class ProjectController extends Controller
       ]);
       try {
          $project = new Project();
-         $validatedData['startDate']=DateHeplers::persianToEnglishDate($request->start_date);
-         $validatedData['endDate']=DateHeplers::persianToEnglishDate($request->end_date);
+         $validatedData['startDate']=DateHelpers::persianToEnglishDate($request->start_date);
+         $validatedData['endDate']=DateHelpers::persianToEnglishDate($request->end_date);
          $project->title=$validatedData['title'] ;
          $project->description=$validatedData['description'] ;
          $project->start_date=$validatedData['startDate'] ;
@@ -58,8 +58,8 @@ class ProjectController extends Controller
             return redirect()->back()->with('error', 'پروژه یافت نشد');
          }else{
             //convert gergorian date to persian
-            $project->start_date=DateHeplers::gregorianToPersianDate($project->start_date);
-            $project->end_date=DateHeplers::gregorianToPersianDate($project->end_date);
+            $project->start_date=DateHelpers::gregorianToPersianDate($project->start_date);
+            $project->end_date=DateHelpers::gregorianToPersianDate($project->end_date);
             return view('projects.edit',compact('project'));   
          }  
             return view('projects.edit',compact('project'));   
@@ -88,8 +88,8 @@ class ProjectController extends Controller
          if(!$project) {
             return redirect()->back()->with('error', 'پروژه یافت نشد');
          }
-         $validatedData['startDate'] = DateHeplers::persianToEnglishDate($request->start_date);
-         $validatedData['endDate'] = DateHeplers::persianToEnglishDate($request->end_date);
+         $validatedData['startDate'] = DateHelpers::persianToEnglishDate($request->start_date);
+         $validatedData['endDate'] = DateHelpers::persianToEnglishDate($request->end_date);
          
          $project->title = $validatedData['title'];
          $project->description = $validatedData['description'];

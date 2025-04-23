@@ -31,7 +31,10 @@
         <a href="{{ url('manual/attendance/getActiveUsers') }}" class="side-item @if(Request::segment(1)== 'manual')bg-primary text-white @endif "   ><i class="fa fa-pencil-alt mr-2" style="font-size: 20px;" aria-hidden="true"></i> حضور غیاب دستی</a>
               
     </li>
-    
+    <li class="side a-collapse short ">
+        <a href="{{ url('payment/members') }}" class="side-item @if(Request::segment(1)== 'payment')bg-primary text-white @endif "   ><i class="fa fa-credit-card mr-2" style="font-size: 20px;" aria-hidden="true"></i>پرداخت ها</a>
+              
+    </li>
     
     <ul class="side a-collapse short ">
         <a class="ul-text  fnt-mxs"><i class="fas fa-tachometer-alt mr-1"></i> صفحه

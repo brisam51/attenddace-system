@@ -59,18 +59,26 @@
                         @foreach ($activeProject as $value)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td class="start-attendance " data-id="{{ $value['project_id'] }}"
-                                    data-user={{ $user_id }}>
+                                <td >
                                     <div class="row d-flex justify-content-center align-items-center">
-                                        <div class="col"> <a href="#" data-id="{{ $value['project_id'] }}"
-                                                data-user="{{ $user_id }}" class="btn btn-primary start-time"
-                                                style="width: 100p; float: right;">ورود </a>
+                                        <div class="col">
+                                             <form action="{{route('attendance.start-time')}}" method="POST">
+                                                @csrf
+                                                 <input type="hidden" class="form-control"  name="project_id" value="{{ $value['project_id'] }}">
+                                                 <input type="hidden" class="form-control"  name="user_id" value="{{ $value['user_id'] }}">
+                                                 <input type="hidden" class="form-control"  name="task_id" value="{{ $value['task_id'] }}">
+                                                 <button type="submit">ثبت ورود</button>
+                                             </form>
                                         </div>
                                         <div class="col">{{ $value['project_title'] }}</div>
-                                        <div class="col"> <a href="#" data-id="{{ $value['project_id'] }}"
-                                                data-user="{{ $user_id }}"
-                                                class="btn btn-success text-center end-time"
-                                                style="width:100px; float:left;">خروج</a>
+                                        <div class="col"> 
+                                            <form action="{{route('attendance.end-time')}}" method="POST">
+                                                @csrf
+                                                <input type="hidden" class="form-control"  name="project_id" value="{{ $value['project_id'] }}">
+                                                <input type="hidden" class="form-control"  name="user_id" value="{{ $value['user_id'] }}">
+                                                <input type="hidden" class="form-control"  name="task_id" value="{{ $value['task_id'] }}">
+                                                <button type="submit">ثبت خروج</button>
+                                            </form>
                                         </div>
 
 

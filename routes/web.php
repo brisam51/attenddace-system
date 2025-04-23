@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\AddressController;
 use App\Http\Controllers\Admin\BankInfoController;
 use App\Http\Controllers\ProjectTaskUserController;
 use App\Http\Controllers\ManualAttendanceController;
+use App\Http\Controllers\PaymentController;
 
 Route::get('/', function () {
     return view('admin.user.dashboard');
@@ -67,15 +68,17 @@ Route::post("attendance/update/{id}", [AttendanceController::class, 'update'])->
 Route::get("manual/attendance/index", [ManualAttendanceController::class, 'index'])->name('manual-attendance.index');
 Route::get("manual/attendance/members/{id}", [ManualAttendanceController::class, 'getMembers'])->name('manual-attendance.members');
 Route::post("/manual/attendance/store", [ManualAttendanceController::class, 'storeManual']);
-
 Route::get("manual/attendance/edit/{id}", [ManualAttendanceController::class, 'editAttendance'])->name('manual-attendance.edit');
 Route::post('manual/attendance/update', [ManualAttendanceController::class, 'updateAttendance'])->name('manual-attendance.update');
 Route::get("manual/attendance/getMember", [ManualAttendanceController::class, 'getMembers']);
 Route::get("manual/attendance/delete/{id}", [ManualAttendanceController::class, 'delete'])->name('manual-attendance.delete');
 Route::get("manual/attendance/getActiveUsers", [ManualAttendanceController::class, 'getActiveProjectMembers'])->name("manual-attendance.activeUsers");
-Route::get("manual/attendance/getActiveProjects/{id}", [ManualAttendanceController::class, 'getActiveProjects'])->name("manual-attendance.activeProjects");
-Route::get('manual/attendance/details/{project_id}/{user_id}', [ManualAttendanceController::class, 'attendanceDetails'])->name('manual-attendance.details');
-Route::get('manulal/add/attendance/{project_id}/{user_id}', [ManualAttendanceController::class, 'addNewAttendanceManully'])->name('manual-attendance.addForm');
+Route::get("manual/attendance/getActiveProjects/{user_id}", [ManualAttendanceController::class, 'getActiveProjects'])->name("manual-attendance.activeProjects");
+Route::get('manual/attendance/details/{project_id}/{user_id}/{task_id}', [ManualAttendanceController::class, 'attendanceDetails'])->name('manual-attendance.details');
+Route::get('manulal/add/attendance/{project_id}/{user_id}/{task_id}', [ManualAttendanceController::class, 'addNewAttendanceManully'])->name('manual-attendance.addForm');
 Route::post('manual/attendance/create', [ManualAttendanceController::class, 'createManualAttendance'])->name('manual-attendance.createManualAttendance');
-Route::get('attendance_edit/details/{id}', [ManualAttendanceController::class, 'attendanceEditDetails'])->name('attendance_edit.details');
+Route::get('attendance_edit/details/{project_id}/{user_id}/{task_id}/{id}', [ManualAttendanceController::class, 'attendanceEditDetails'])->name('attendance_edit.details');
 Route::post('attendance_update/details/{id}', [ManualAttendanceController::class,'updateAttendanceDetails'])->name('attendance-details.update');
+//payments routes
+Route::get('payment/members', [PaymentController::class, 'FetchActiveMemberInProjects'])->name('payment.members');
+Route::get('payment/calculate/{id}', [PaymentController::class, 'calculatePayment'])->name('payment.calculate');

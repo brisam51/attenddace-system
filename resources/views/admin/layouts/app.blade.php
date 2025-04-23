@@ -29,13 +29,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-4">
-                                    <ol class="breadcrumb float-sm-right">
-                                        <li class="breadcrumb-item "><a href="#"><i class="fas fa-home"></i></a>
-                                        </li>
-                                        <li class="breadcrumb-item active">داشبورد</li>
-                                    </ol>
-                                </div>
+                                
                             </div>
                         </div>
                     </div>

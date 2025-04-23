@@ -25,7 +25,7 @@
     </div>
     <div class="card">
         <div class="card-header">
-            <a href="{{route('manual-attendance.details',['project_id'=>$project_id,'user_id'=>$user_id])}}" class="btn btn-primary" onclick="history.back()" style="width:120px; "> بازگشت</a>
+            <a href="{{route('manual-attendance.details',['project_id'=>$project_id,'user_id'=>$user_id,'task_id'=>$task_id])}}" class="btn btn-primary" onclick="history.back()" style="width:120px; "> بازگشت</a>
         </div>
         <div class="card-body">
             <form action="{{ route('manual-attendance.createManualAttendance') }}" method="POST">
@@ -33,6 +33,7 @@
                 <input type="text" name="project_id" id="project_id" class="form-control" value="{{ $project_id }}"
                     hidden>
                 <input type="text" name="user_id" id="user_id" class="form-control" value="{{ $user_id }}" hidden>
+                <input type="text" name="task_id" id="task_id" class="form-control" value="{{ $user_id }}" hidden>
                 <div class="form-group">
                     <label for="work_date">تاریخ:</label>
                     <input id="work_date" type="text" name="work_date" class="form-control"

@@ -18,61 +18,68 @@ class AttendanceController extends Controller
 
    public function index()
    {
-      $user_id = 1;
+      $user_id = 3;
+try{
+  // Retrieve the active project title for the given user
+  $activeProject = ProjectTaskUser::where('user_id', $user_id)
+  ->whereHas('project', function ($query) {
+     $query->where('status', 0); //filtter for get active projects
+  })
+  ->with(['project' => function ($query) {
+     $query->select('id', 'title');
+  }])->get()
+  ->map(function ($projectTaskUser) {
+     return [
+        'project_id' => $projectTaskUser->project?->id,
+        'project_title' => $projectTaskUser->project?->title,
+        'task_id' => $projectTaskUser->task_id,
+        'task_title' => $projectTaskUser->task?->title,
+        'user_id' => $projectTaskUser->user_id,
+     ];
+  });
 
-      // Retrieve the active project title for the given user
-      $activeProject = ProjectTaskUser::where('user_id', $user_id)
-         ->whereHas('project', function ($query) {
-            $query->where('status', 0);
-         })
-         ->with(['project' => function ($query) {
-            $query->select('id', 'title');
-         }])->get()
-         ->map(function ($projectTaskUser) {
-            return [
-               'project_id' => $projectTaskUser->project?->id,
-               'project_title' => $projectTaskUser->project?->title,
-            ];
-         });
-      return view('attendance.index', ['activeProject' => $activeProject, 'user_id' => $user_id]);
+
+return view('attendance.list_projects_person', ['activeProject' => $activeProject]);
+}catch(Exception $e) {
+return back()->with('error', 'An error occurred while retrieving the active project title for the given user.');
+}
+    
    }
 
    //call the start attendance
    public function startAttendance(Request $request)
    {
+     
       $validated = $request->validate([
          'user_id' => 'required|exists:users,id',
          'project_id' => 'required|exists:projects,id',
+         'task_id' => 'required|exists:tasks,id',
       ]);
       try {
+   
          //check if the user has already active attendance (starte
          $activeAttendance = Attendance::where('user_id', $validated['user_id'])
+         
             ->whereNull('end_time')
             ->first();
          if ($activeAttendance) {
-            return response()->json([
-               'success' => false,
-               'message' => 'لطفا به فعالیت های خود در پروژه های دیگر پایان دهید'
-            ], 400);
+            return back()->with('error','زمان ورده شما قبلا ثبت شده است');
          }
-
+         $intUser_id = intval($validated['user_id']);
+         $intProject_id = intval($validated['project_id']);
+         $intTask_id = intval($validated['task_id']);
          $workDate = Carbon::now()->format('Y-m-d');
-         $startTime = Carbon::now()->format('H:i:s');
+         $startTime = Carbon::now()->format('H:i');
          $attendance = Attendance::create([
-            'user_id' => $validated['user_id'],
-            'project_id' => $validated['project_id'],
+            'user_id' => $intUser_id,
+            'project_id' => $intProject_id,
+            'task_id' => $intTask_id,
             'work_date' => $workDate,
-            'created_by' => $validated['user_id'],
+            'created_by' =>2,
+            'updated_by' => 2,
             'start_time' =>  $startTime,
          ]);
-         return response()->json(
-            [
-               'success' => true,
-               'message' => 'حضور شما در پروژه با موفقیت ثبت شد!',
-               'data' => $attendance
-            ],
-            200
-         );
+         return back()->with('success','زمان ورود شما از پروژه با موفقیت ثبت شد');
       } catch (Exception $e) {
          Log::error($e->getMessage());
          return response()->json([
@@ -88,21 +95,21 @@ class AttendanceController extends Controller
       $validated = $request->validate([
          'user_id' => 'required|exists:users,id',
          'project_id' => 'required|exists:projects,id',
+         'task_id' => 'required|exists:tasks,id',
       ]);
 
       try {
-         $user_id = $request->user_id;
-         $project_id = $request->project_id;
-         $attendance =  Attendance::where('user_id', $user_id)
-            ->where('project_id', $project_id)
+         $intUser_id = intval($validated['user_id']);
+         $intProject_id = intval($validated['project_id']);
+         $intTask_id = intval($validated['task_id']);
+         $attendance =  Attendance::where('user_id',$intUser_id)
+            ->where('project_id',  $intProject_id)
+            ->where('task_id', $intTask_id)
             ->whereNull('end_time')
             ->latest('start_time')
             ->first();
          if (!$attendance) {
-            return response()->json([
-               'success' => false,
-               'message' => 'ثبت حضوری برای شما یافت نشد لطفا در ابتدا ثبت حضور بنمایید'
-            ], 404);
+            return back()->with('error',' زمان ورودی برای شما در این پروژه ثبت نشده است  ');
          }
          $startTime = Carbon::parse($attendance->start_time);
          $endTime = Carbon::now();
@@ -113,21 +120,13 @@ class AttendanceController extends Controller
                'message' => 'ثبت پایان حضور نباید قبل از ثبت شروع حضور انجام گیرد.'
             ], 400);
          }
-         $formatedTotalTime =Number_format($startTime->diffInMinutes($endTime) / 60,2);
+         $formatedTotalTime = Number_format($startTime->diffInMinutes($endTime) / 60, 2);
          $attendance->update([
-            'end_time' =>  $endTime->format('H:i:s'),
+            'end_time' =>  $endTime->format('H:i'),
             'total_time' => $formatedTotalTime,
          ]);
-         return response()->json([
-            'success' => true,
-            'message' => 'خروج از پروژه با موفقیت ثبت شد',
-            'data' => [
-               'start_time' => $startTime->format('H:i:s'),
-               'end_time' => $endTime->format('H:i:s'),
-              
-            ]
-         ]);
-      } catch (Exception $e) {
+         return back()->with('success','.زمان  خروج شما با موفقیت ثبت شد');
+            } catch (Exception $e) {
          Log::error($e->getMessage());
          return response()->json([
             'success' => false,
@@ -155,5 +154,5 @@ class AttendanceController extends Controller
       ]);
    }
    //Manual store attendance
-   
+
 }

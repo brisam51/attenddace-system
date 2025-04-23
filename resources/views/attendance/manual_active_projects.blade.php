@@ -1,11 +1,11 @@
 @extends('admin.layouts.app')
 
 @section('title')
-Active Members
+project list
 @endsection
 
 @section('dashboard')
-Active Members
+project list
 @endsection
 
 @section('my-style')
@@ -14,9 +14,9 @@ Active Members
 
 
 @section('content')
-<div class="jumbotron shade pt-2 pb-3">
-    <div class="container">
-        {{-- start success /error messages --}}
+
+   
+        
         <div class="flash-messages">
             @if (session('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -46,49 +46,70 @@ Active Members
                 </div>
             @endif
         </div>
-        {{-- end success error messags --}}
+     <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <div class="d-flex flex-row space-x-4 align-items-start">
+                <div class="col-8">
+                    <a href="{{route('manual-attendance.activeUsers')}}" class="btn btn-primary"  style="width: 100px; height: 40px; font-size: 15px; margin-bottom: 10px; margin-left: 10px;">بازگشت</a>
+                </div>
+                <div class="col-12">
+                  
+                    <span  class="text-center" style="font-size:20px;"> لیست پروژه های فعال : <strong>{{$user->first_name}}  {{$user->last_name}}</strong></span>
+                </div>
+               
+               
+            </div>
+            
+                 
+
+        </div>
+        </div>
         <div class="card-body">
             <div class="table-responsive">
                 <table id="user-table" class=" user-table">
                     <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">تصویر</th>
-                            <th scope="col">نام</th>
-                            <th scope="col">نام و نام خانوادگی</th>
-                            <th scope="col">کدملی</th>
-                            <th scope="col">پروژه</th>
+                            <th scope="col">عنوان پروژه</th>
+                            <th scope="col">کد پروژه</th>
+                            <th scope="col"> عنوان شغل</th>
+                            <th scope="col">جزییات فعالیت ها</th>
+                            
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($activeUsers as $value)
-                        <tr>
-                            <td>{{ $loop->iteration }}</td>
-                           <td><img src="{{ asset('assets/images/' . $value->image) }}" class="user-image" alt="No Image"></td>
-                            <td>{{$value->first_name}}</td>
-                            <td>{{$value->last_name}}</td>
-                            <td>{{\App\Helpers\NumberConverter::englishToPersianNumber($value->national_id)}}</td>
-                            <td>
-                                <a href="{{url('manual/attendance/getActiveProjects/'.$value->id)}}"  class="btn btn-success">Active Project</a>
-                            </td>
-                        </tr> 
-                        @endforeach
+                       @foreach ($projects as $value)
+                          <tr>
+                          <td>{{$loop->iteration}}</td>
+                            <td>{{$value['title']}}</td>
+                          <td>project-codw</td>
+                          <td>{{$value['taskTitle']}}</td>
+                         <td>
+                            <a href="{{route('manual-attendance.details',['project_id'=>$value['id'],'task_id'=>$value['taskId'],'user_id'=>$value['userId']])}}" class="btn btn-primary">فعالیت</a> 
+                         </td>
+                        
+                          </tr>
+                       @endforeach
+                   
+                    <tbody>
+                       
 
                     </tbody>
                 </table>
 
             </div>
         </div>
-
-    </div>
+     </div>
+       
+    
+  
    
-        </div>
-
-    </div>
+       
 
 
 
-</div>
+
+
 
 
 @endsection

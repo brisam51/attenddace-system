@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin;
 use Exception;
 use Carbon\Carbon;
 use App\Models\User;
-use App\helpers\DateHeplers;
-use App\helpers\handleImage;
+use App\Helpers\DateHelpers;
+use App\helpers\handleImage;    
 use Illuminate\Http\Request;
 use Morilog\Jalali\Jalalian;
 use Illuminate\Support\Facades\Log;
@@ -62,7 +62,7 @@ class UserController extends Controller
           
             $user = new User();
             $personData["image"] = $imagePath;
-            $birthdate = DateHeplers::persianToEnglishDate($personData['birth_date']);
+            $birthdate = DateHelpers::persianToEnglishDate($personData['birth_date']);
             $user->first_name = $personData['first_name'];
             $user->last_name = $personData['last_name'];
             $user->national_id = $personData['national_id'];
@@ -158,7 +158,7 @@ class UserController extends Controller
             //Handel birth date
             if (!empty($request['birth_date'])) {
 
-                $validateData['birth_date'] = DateHeplers::persianToEnglishDate($request['birth_date']);
+                $validateData['birth_date'] = DateHelpers::persianToEnglishDate($request['birth_date']);
             } else {
                 unset($validateData['birth_date']);
             }

@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('Attendance', function (Blueprint $table) {
+        Schema::create('attendances', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('project_id')->constrained('projects');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('project_id')->constrained('projects')->onDelete('cascade');
+            $table->foreignId('task_id')->constrained('tasks')->onDelete('cascade');
             $table->date('work_date')->nullable();
             $table->time('start_time')->nullable();
             $table->time('end_time')->nullable();
@@ -22,6 +23,11 @@ return new class extends Migration
             $table->foreignId('created_by')->constrained('users');
             $table->foreignId('updated_by')->constrained('users');
             $table->timestamps();
+            //Ensure that the combination of project_id, user_id, and task_id exists in the pivot table
+            // $table->foreign(['project_id', 'user_id', 'task_id'])
+            //     ->references(['project_id', 'user_id', 'task_id'])
+            //     ->on('project_task_user')
+            //     ->onDelete('cascade');
         });
     }
 
@@ -30,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('Attendance');
+        Schema::dropIfExists('attendances');
     }
 };
